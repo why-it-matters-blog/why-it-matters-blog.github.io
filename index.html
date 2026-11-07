@@ -1,10 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Why It Matters</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Why It Matters – AI explained clearly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Why It Matters</h1>
-    <p>Welcome to my website!</p>
+<header><div class="wrap">
+<a class="logo" href="#home" aria-label="Why It Matters – home">
+<img src="logo.svg" alt="" width="48" height="48">
+<span>why it matters</span></a>
+<nav aria-label="Main menu"><a href="#home">Home</a><a href="#blog">Blog</a><a href="#about">About us</a><a href="#contact">Contact us</a></nav>
+</div></header>
+
+<main>
+<section id="home">
+<div class="hero"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+<div class="wrap"><h1>AI is everywhere. Know what to trust.</h1>
+<p>Plain-language guides on the AI problems that affect your work, your news feed and your private life.</p>
+<a class="btn" href="#articles">Start reading</a></div></div>
+<div class="wrap grid" id="articles">
+<h2 class="t">Latest articles</h2>
+<a class="card c1" href="#hallucinations"><img src="images/hallucinations.svg" alt="" loading="lazy"><div><h3>Why AI hallucinations matter more than you think</h3><p>Chatbots can sound sure and still be wrong. Learn why, and how to check.</p></div><b>Read article</b></a>
+<a class="card c2" href="#deepfakes"><img src="images/deepfakes.svg" alt="" loading="lazy"><div><h3>Why AI deepfakes matter in an era of fake news</h3><p>Looking real and being real are not the same. Learn how to verify before you share.</p></div><b>Read article</b></a>
+<a class="card c3" href="#privacy"><img src="images/privacy.svg" alt="" loading="lazy"><div><h3>Why your privacy matters when using AI chatbots</h3><p>Ordinary chats reveal more than you expect. Learn what to keep to yourself.</p></div><b>Read article</b></a>
+</div>
+<div class="why"><div class="wrap"><h2>Convenience is not enough.</h2><p>AI is changing how we learn, work and find information. Understanding its limits helps you use it with confidence, not blind trust.</p></div></div>
+</section>
+
+<section id="blog">
+<div class="top"><div class="wrap"><h1>Blog</h1><p>Clear, practical guides on AI accuracy, misinformation and privacy. Pick a topic and start reading.</p></div></div>
+<div class="wrap grid blog-grid">
+<a class="card c1" href="#hallucinations"><img src="images/hallucinations.svg" alt="" loading="lazy"><div><span class="tag">AI accuracy</span><h3>Why AI hallucinations matter more than you think</h3><p>Chatbots can sound sure and still be wrong. Learn why, and how to check.</p></div><b>Read article</b></a>
+<a class="card c2" href="#deepfakes"><img src="images/deepfakes.svg" alt="" loading="lazy"><div><span class="tag">Misinformation</span><h3>Why AI deepfakes matter in an era of fake news</h3><p>Looking real and being real are not the same. Learn how to verify before you share.</p></div><b>Read article</b></a>
+<a class="card c3" href="#privacy"><img src="images/privacy.svg" alt="" loading="lazy"><div><span class="tag">Privacy</span><h3>Why your privacy matters when using AI chatbots</h3><p>Ordinary chats reveal more than you expect. Learn what to keep to yourself.</p></div><b>Read article</b></a>
+</div></section>
+
+<section id="about">
+<div class="top"><div class="wrap"><h1>About us</h1><p>We explain AI in plain language, so you can use it with confidence and question it when you should.</p></div></div>
+<div class="body">
+<h2>Why we exist</h2>
+<p>AI is changing how people learn, work and find information. But speed and convenience are not enough if the information is wrong, fake or puts your privacy at risk. Why It Matters turns these issues into simple guides anyone can follow, with no technical background needed.</p>
+<h2>What we cover</h2>
+<div class="facts">
+<div><h3>Accuracy</h3><p>Why AI gets things wrong and how to check its answers.</p></div>
+<div><h3>Truth online</h3><p>How deepfakes spread fake news and how to spot them.</p></div>
+<div><h3>Privacy</h3><p>What to share with chatbots and what to keep to yourself.</p></div>
+</div>
+<h2>Our approach</h2>
+<p>Every article explains what the problem is, why it matters, what you can do about it, and answers common questions. The goal is not to make you afraid of AI. It is to help you use it wisely.</p>
+<p><a class="btn" href="#blog">Read the blog</a></p>
+</div></section>
+
+<section id="contact">
+<div class="top"><div class="wrap"><h1>Contact us</h1><p>Have a question, a topic idea or feedback? Send us a message.</p></div></div>
+<div class="body">
+<form action="mailto:hello@whyitmatters.com" method="post" enctype="text/plain">
+<label>Your name<input type="text" name="name" autocomplete="name" required></label>
+<label>Email address<input type="email" name="email" autocomplete="email" required></label>
+<label>Message<textarea name="message" required></textarea></label>
+<button class="btn" type="submit">Send message</button>
+</form>
+</div></section>
+
+<article id="hallucinations"><section style="display:contents">
+<div class="top"><div class="wrap"><a href="#home">&larr; All articles</a><h1 style="margin-top:14px">Why AI hallucinations matter more than you think</h1><p>A confident answer can still be completely wrong.</p></div></div>
+<div class="figure"><img src="images/hallucinations.svg" alt="A friendly robot with a glitchy eye beside a confident chat bubble and a fake source marked with a cross"><p>A confident answer is not always a correct one.</p></div>
+<div class="body">
+<p>AI hallucinations happen when an AI system produces information that is incorrect, misleading or made up, while presenting it as true. As AI enters education, business, research and daily life, this matters more every day.</p>
+<h2>What are AI hallucinations?</h2>
+<p>A chatbot might invent a research paper, give a false historical date, explain a technical concept wrongly, or create fake links and sources. Fluent language makes these answers hard to spot, because a well-written reply looks verified even when it is not.</p>
+<h2>Why do they happen?</h2>
+<h3>AI predicts language, not guaranteed truth</h3><p>Models generate text by predicting what is likely to come next. A likely sentence is not always a factual one.</p>
+<h3>Incomplete or conflicting information</h3><p>When information is missing, a model may still answer instead of admitting what it does not know.</p>
+<h3>Ambiguous questions</h3><p>Unclear wording can mix up details, such as two companies with the same name. Precise questions reduce confusion but cannot remove every mistake.</p>
+<h2>Where it becomes a problem</h2>
+<ul><li><b>Education:</b> students may learn false facts, especially if they copy answers unchecked.</li><li><b>Business:</b> an invented statistic or market claim can damage credibility.</li><li><b>Research:</b> fake citations and unverifiable claims need independent checking.</li><li><b>Programming:</b> code can be wrong or insecure, so test it before trusting the explanation.</li></ul>
+<h2>Why it matters more than you think</h2>
+<p>Humans make mistakes too. The difference is that AI can produce wrong information quickly, repeatedly and in a convincing format. False claims spread when they are copied into posts and documents, repeated errors can make people stop trusting useful tools, and in healthcare, finance or legal matters the consequences can be serious.</p>
+<h2>How to reduce the risk</h2>
+<ul><li>Verify important facts, especially statistics, dates and quotes.</li><li>Ask the AI to separate facts from assumptions, but remember that its confidence is not proof.</li><li>Request sources, then open them and confirm they support the claim.</li><li>Use AI as an assistant, not an authority.</li><li>Consult qualified professionals for medical, legal, financial and safety decisions.</li></ul>
+<p>Researchers are improving reliability with verified sources, retrieval systems and extra checks. These reduce some errors but cannot guarantee accuracy.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>Are AI hallucinations intentional?</summary><p>No. They come from limits in how models generate information, not from deliberate lying.</p></details>
+<details><summary>Can ChatGPT give incorrect answers?</summary><p>Yes. Any AI system can produce wrong explanations, statistics and references, so verify what matters.</p></details>
+<details><summary>How can students avoid hallucinations?</summary><p>Use AI to understand concepts, compare with textbooks, verify facts, and never submit unchecked answers.</p></details>
+<details><summary>Is AI still useful?</summary><p>Yes, for learning, writing and productivity. Just remember that useful technology can still make mistakes.</p></details>
+<div class="take">AI can help you find answers, but knowing when to question those answers is what truly matters.</div>
+</div></section></article>
+
+<article id="deepfakes"><section style="display:contents">
+<div class="top"><div class="wrap"><a href="#home">&larr; All articles</a><h1 style="margin-top:14px">Why AI deepfakes matter in an era of fake news</h1><p>A video can lie. A voice can pretend. A picture can show something that never happened.</p></div></div>
+<div class="figure"><img src="images/deepfakes.svg" alt="A video player showing a face that is real on one side and digitally altered on the other, with a FAKE? label"><p>Half real, half generated: can you tell which is which?</p></div>
+<div class="body">
+<p>The real danger is not just fake videos. It is millions of people believing, sharing and acting on something that never happened. Understanding deepfakes is now an essential internet skill.</p>
+<h2>What are AI deepfakes?</h2>
+<p>Deepfakes are digitally created or manipulated videos, images or audio that make something appear real when it is not. AI learns faces, voices and speaking patterns from existing content, then generates new material that looks or sounds like a real person. Some deepfakes serve entertainment, education and filmmaking. The problem starts when they deceive people or damage reputations.</p>
+<h2>How deepfakes change fake news</h2>
+<p>Fake news is old, but realistic AI content makes it much harder to detect, because people naturally believe what they see and hear.</p>
+<h3>Fake political statements</h3><p>A realistic clip of a leader can mislead viewers and shake trust in institutions.</p>
+<h3>Fake news during emergencies</h3><p>A false video of an explosion or government announcement can cause panic when people want quick updates.</p>
+<h3>Fake celebrity videos</h3><p>Viewers may trust ads or opinions that the person never endorsed.</p>
+<h2>Why they matter beyond fake videos</h2>
+<ul><li><b>Reputation:</b> a fake video is hard to remove once it spreads, and some people keep believing it afterwards.</li><li><b>False belief:</b> a realistic video is no longer proof that something happened.</li><li><b>Scams:</b> cloned voices can imitate relatives or bosses to demand urgent money.</li><li><b>Lost trust in real information:</b> genuine recordings can be dismissed as fake.</li></ul>
+<h2>How to identify a deepfake</h2>
+<ul><li><b>Check the original source.</b> Is it an official account, reliable news outlet, or unknown profile?</li><li><b>Look for independent confirmation.</b> Major announcements get covered by multiple credible outlets.</li><li><b>Be careful with emotional content.</b> Fakes try to make you angry, scared or shocked, so pause before sharing.</li><li><b>Notice visual or audio glitches</b> like odd blinking, lighting or sound, but modern fakes may show none.</li><li><b>Use detection tools carefully.</b> They give clues, not final proof.</li></ul>
+<h2>Before you share a video</h2>
+<ul><li>Check the original source and the date and context.</li><li>Search trusted news sites for the same information.</li><li>Do not share something only because it is shocking.</li><li>Do not trust a familiar voice or face without verification.</li><li>Report harmful content and correct yourself if you shared a falsehood.</li></ul>
+<h2>Can AI help fight deepfakes?</h2>
+<p>Yes. Researchers build systems that detect manipulation, and content provenance methods can show where media came from and whether it was changed. No single technology solves the problem, so the strongest protection combines technology, reliable journalism and responsible habits.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>Are all deepfakes harmful?</summary><p>No. They become harmful when used to deceive, manipulate, impersonate or damage someone.</p></details>
+<details><summary>Can deepfakes be detected with 100% accuracy?</summary><p>No. Detection can miss realistic fakes and sometimes flags genuine videos.</p></details>
+<details><summary>Can deepfakes spread fake news?</summary><p>Yes. Shared without verification, they become a powerful tool for misinformation.</p></details>
+<details><summary>How can I protect myself?</summary><p>Check sources, verify important claims, avoid sharing emotional content at once, and look for independent confirmation.</p></details>
+<div class="take">The next time a video looks convincing, remember one thing: looking real and being real are not always the same.</div>
+</div></section></article>
+
+<article id="privacy"><section style="display:contents">
+<div class="top"><div class="wrap"><a href="#home">&larr; All articles</a><h1 style="margin-top:14px">Why your privacy matters when using AI chatbots</h1><p>The information you share may not stay as private as you expect.</p></div></div>
+<div class="figure"><img src="images/privacy.svg" alt="A shield with a padlock next to a chat message with redacted private details"><p>Some details should stay out of the chat.</p></div>
+<div class="body">
+<p>People use chatbots to write emails, prepare for interviews, fix code and even discuss personal situations. A simple conversation can reveal your interests, workplace, habits, money worries, health concerns and relationships. This does not mean every chatbot is unsafe. It means understanding how your data is handled is part of using AI responsibly.</p>
+<h2>What happens to your information?</h2>
+<p>Your message is processed to generate a reply. Depending on the platform, chats may be stored, reviewed for safety or used to improve models. Rules depend on the chatbot, its privacy policy, your settings and your account type, since personal and business accounts can differ. Check the settings instead of assuming all chatbots work the same way.</p>
+<h2>Why privacy matters more than you think</h2>
+<h3>Small details reveal a lot</h3><p>Education, experience, location, salary hopes and career plans may seem harmless alone. Together they form a detailed picture of your life.</p>
+<h3>Sensitive information creates serious risks</h3>
+<ul><li>Passwords and login details</li><li>Bank and payment details</li><li>Government ID numbers</li><li>Private medical reports</li><li>Confidential business documents</li><li>Personal photos and private messages</li></ul>
+<p>Remove sensitive details first. Share only the relevant numbers, or use a fictional name instead of a real person's.</p>
+<h3>Chats may contain business secrets</h3><p>Customer records, internal strategies and unpublished products should not go into an AI service without authorization. Company data rules still apply.</p>
+<h3>Privacy settings help, but have limits</h3><p>Turning off model training may not disable chat history or remove data already stored. Know what each setting actually controls.</p>
+<h2>Can chatbots remember you?</h2>
+<p>Some services have memory features that keep selected details across chats, like your writing style or job. Memory differs from conversation history, which is simply your stored previous chats. You may be able to review, update or turn off memory, so understand these options before sharing personal details regularly.</p>
+<h2>How to protect your privacy</h2>
+<ul><li><b>Never share passwords.</b> Describe the error without sharing codes or recovery information.</li><li><b>Clean documents before uploading.</b> Remove names, numbers, addresses and IDs, or share only the relevant section.</li><li><b>Review privacy controls:</b> history, training, temporary chats, memory, data deletion and shared links.</li><li><b>Be careful with shared links.</b> Review the whole conversation first, or share a cleaned-up copy.</li><li><b>Read the privacy policy</b> before sensitive work, and follow your organization's approved tools.</li></ul>
+<h2>Is it safe to use chatbots?</h2>
+<p>For many everyday tasks, careful use is reasonably safe. Safety depends on the service, the information and the protections available. A tool fine for a social media caption may not suit confidential customer data. So ask a better question: is this particular AI service appropriate for the information I am about to share?</p>
+<h2>Frequently asked questions</h2>
+<details><summary>Do chatbots use conversations for training?</summary><p>Some do, depending on policy and settings. Business accounts may differ, so check the service's data controls.</p></details>
+<details><summary>Can chatbots share my information with other users?</summary><p>Not necessarily. But risks can come from data practices, unauthorized access, weak account security or sharing features.</p></details>
+<details><summary>Should I upload personal documents?</summary><p>Only when necessary and when the service suits that information. Remove unneeded sensitive details first.</p></details>
+<details><summary>Does deleting a chat remove all my data?</summary><p>Not always. Retention periods, backups and legal rules vary, so read the platform's documentation.</p></details>
+<div class="take">The smartest way to use AI is not just knowing what it can do. It is knowing what you should never give away.</div>
+</div></section></article>
+</main>
+
+<footer><div class="wrap"><span class="foot-links"><a href="#blog">Blog</a><a href="#about">About us</a><a href="#contact">Contact us</a></span><span>&copy; 2026</span></div></footer>
 </body>
 </html>
