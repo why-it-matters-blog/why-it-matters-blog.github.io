@@ -38,7 +38,9 @@ def articles():
     for fn in os.listdir(ARTS) if os.path.isdir(ARTS) else []:
         if fn.endswith('.json'):
             a = read_json(os.path.join(ARTS, fn), None)
-            if a and SLUG.match(a.get('slug', '')): out.append(a)
+            try:
+                if a and SLUG.match(a.get('slug', '')): out.append(clean(a))
+            except Exception: pass
     return sorted(out, key=lambda a: (a.get('date', ''), a['slug']), reverse=True)
 
 def clean(a):
@@ -229,7 +231,7 @@ class H(BaseHTTPRequestHandler):
         if not self.local(): return self.out(403, {'error': 'forbidden'})
         u = urlparse(self.path); q = parse_qs(u.query)
         if u.path == '/api/status': return self.out(200, {'setup': not os.path.exists(AUTH), 'authed': self.authed()})
-        if u.path == '/': return self.out(200, open(P('dashboard', 'index.html' if self.authed() else 'login.html'), 'rb').read(), 'text/html')
+        if u.path == '/': return self.out(200, open(P('dashboard', 'local.html' if self.authed() else 'login.html'), 'rb').read(), 'text/html')
         if u.path.startswith('/api/') and not self.authed(): return self.out(401, {'error': 'Login zaroori hai.'})
         if u.path == '/api/articles': return self.out(200, articles())
         if u.path == '/api/settings': return self.out(200, settings())
@@ -304,7 +306,9 @@ class H(BaseHTTPRequestHandler):
             self.out(400, {'error': str(ex)})
 
 def main():
-    os.makedirs(ARTS, exist_ok=True); build()
+    os.makedirs(ARTS, exist_ok=True)
+    if len(sys.argv) > 1 and sys.argv[1] == 'build': print('Site built:', build(), 'articles'); return
+    build()
     for port in range(8000, 8011):
         try: srv = ThreadingHTTPServer(('127.0.0.1', port), H); break
         except OSError: continue

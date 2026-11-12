@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Why It Matters – Dashboard</title>
-<link rel="icon" href="/site/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml"><meta name="robots" content="noindex,nofollow">
 <style>
 :root{--ink:#3d3b78;--bg:#fcfaff;--line:#d9d4f5;--pink:#ffc9db;--yellow:#ffeaa8;--mint:#c4f0e0;--lav:#e9e4ff;font-family:"Trebuchet MS",system-ui,sans-serif}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#2d2b5c}
@@ -25,13 +25,20 @@ table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px 8px
 #toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:12px 20px;border-radius:14px;display:none;max-width:340px;z-index:9}#toast.err{background:#c0446e}
 .hint{color:#6d6b99;font-size:.9rem;margin:0 0 10px}.bar{position:sticky;bottom:0;background:var(--bg);padding:12px 0;border-top:2px solid var(--line);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 dialog{border:2px solid var(--ink);border-radius:18px;width:min(720px,94vw);padding:20px}dialog textarea{min-height:300px}
-</style></head><body>
-<header><img src="/site/logo.svg" alt=""><b>why it matters · dashboard</b>
+.locked header,.locked main{display:none}#gate[hidden]{display:none}#gate{min-height:100vh;display:grid;place-items:center;background:#e9e4ff;padding:20px}
+.gbox{width:min(440px,100%);background:#fff;border:2px solid var(--ink);border-radius:24px;padding:28px;box-shadow:8px 8px 0 rgba(61,59,120,.25)}.gbox h1{color:var(--ink);font-size:1.5rem;margin:14px 0 6px}.gbox .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;color:var(--ink)}.gbox .logo img{width:44px}
+.gbox button.pri{width:100%;margin-top:16px;padding:12px}.chk{display:flex;gap:8px;align-items:center;font-weight:400}.chk input{width:auto}#gerr{color:#c0446e;font-weight:700;font-size:.9rem;margin-top:10px;min-height:1.2em}.gbox details{margin-top:12px;font-size:.9rem;color:#4b4880}.gbox summary{cursor:pointer;font-weight:700;color:var(--ink)}.gbox ol{padding-left:18px}
+</style></head><body class="locked">
+<div id="gate" hidden><form class="gbox" id="gf"><div class="logo"><img src="../logo.svg" alt="">why it matters</div><h1>Dashboard login</h1><p class="hint">Sirf wahi login kar sakta hai jiske paas is site ke GitHub repo ka access token ho.</p>
+<label>GitHub username</label><input id="g_owner" autocomplete="username" required><label>Repository name</label><input id="g_repo" required><label>Access token</label><input id="g_token" type="password" autocomplete="current-password" required>
+<label class="chk"><input type="checkbox" id="g_rem"> Is device par yaad rakho</label><button class="pri" id="gb">Login</button><div id="gerr" role="alert"></div>
+<details><summary>Token kaise banayein?</summary><ol><li>GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; <b>Fine-grained tokens</b> &rarr; Generate new token.</li><li>Repository access: <b>Only select repositories</b> &rarr; apni site ka repo.</li><li>Permissions &rarr; Contents: <b>Read and write</b> (Actions: Read-only bhi de do, site status dikhane ke liye).</li><li>Token copy karke yahan paste karo. Ye sirf ek baar dikhta hai.</li></ol></details></form></div>
+<header><img src="../logo.svg" alt=""><b>why it matters · dashboard</b>
 <nav><button id="n-list" class="on">Articles</button> <button id="n-new">+ New article</button> <button id="n-set">Settings</button></nav><span class="sp"></span>
-<a class="btn" href="/site/index.html" target="_blank">Preview site</a> <a class="btn" href="/api/zip">Download site ZIP</a> <button id="logout">Logout</button></header>
+<span id="st" class="hint" style="margin:0"></span> <a class="btn" href="../" target="_blank">Open live site</a> <button id="logout">Logout</button></header>
 <main>
 <section id="v-list"><h2>Articles</h2><div class="card"><table><thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table><p class="hint" id="none" hidden>Abhi koi article nahi hai. “New article” se shuru karo.</p></div>
-<div class="card"><b>Site ko live kaise karein?</b><p class="hint">Har save ke baad <code>public</code> folder apne aap update ho jata hai. Live karne ke liye “Download site ZIP” dabao, aur uski files hosting par upload kar do (purani files replace karni hongi).</p></div></section>
+<div class="card"><b>Site live kaise hoti hai?</b><p class="hint">Save karte hi article GitHub par save hota hai aur 1–2 minute mein site apne aap update ho jaati hai. Upar status dikhta rahega. Kuch upload nahi karna padta.</p></div></section>
 
 <section id="v-edit" hidden><h2 id="et">New article</h2>
 <div class="card"><p class="hint">Pehle se likha article hai? <button class="sm" id="imp">Paste article text</button> (heading, lists, FAQ aur SEO details apne aap fill ho jayenge)</p>
@@ -52,25 +59,87 @@ dialog{border:2px solid var(--ink);border-radius:18px;width:min(720px,94vw);padd
 <label>Blog page text</label><textarea id="s_blog_intro" style="min-height:70px"></textarea>
 <label>About us – top line</label><textarea id="s_about_intro" style="min-height:70px"></textarea>
 <label>About us – content <small>(heading ke liye line ki shuruaat “# ” se karo; paragraphs ke beech khali line)</small></label><textarea id="s_about_text" style="min-height:220px"></textarea>
-<p><button class="pri" id="saveset">Save settings</button></p></div>
-<div class="card"><b>Change password</b><label>Current password</label><input id="pw_old" type="password" autocomplete="current-password"><div class="row"><div><label>New password <small>(kam se kam 8 characters)</small></label><input id="pw_new" type="password" autocomplete="new-password"></div><div><label>Repeat new password</label><input id="pw_new2" type="password" autocomplete="new-password"></div></div><p><button id="savepw">Change password</button></p></div></section></main>
+<p><button class="pri" id="saveset">Save settings</button></p></div></section></main>
 <dialog id="dlg"><b>Paste article text</b><p class="hint">Poora article yahan paste karo. Pehli line title hoti hai. Heading “# ” se ya alag short line se pehchani jaati hai.</p><textarea id="paste"></textarea><p><button class="pri" id="doimp">Fill the form</button> <button id="closeimp">Cancel</button></p></dialog>
 <div id="toast"></div>
 <script>
 const $=s=>document.querySelector(s);let cur=null,old='',blocks=[],faq=[],img={src:'',alt:'',caption:''};
-const api=(p,d)=>fetch(p,d===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-Admin':'1'},body:JSON.stringify(d)}).then(async r=>{if(r.status===401){location.reload();throw new Error('Login zaroori hai.')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j});
+//GH_LAYER_START
+const GH='https://api.github.com',DEF={"contact_email": "hello@whyitmatters.com", "hero_title": "Understand why it matters.", "hero_text": "Plain-language guides that explain why everyday topics matter, and what you can do about them.", "blog_intro": "Clear, practical guides on topics that matter in everyday life. Pick a topic and start reading.", "about_intro": "We explain why things matter, in simple language, so you can make better decisions with confidence.", "about_text": "# Why we exist\n\nMany topics affect our daily lives, from staying safe online to looking after our health and managing money. Yet the information about them is often scattered, technical or overwhelming. Why It Matters was created to make these topics easy to understand.\n\n# Our approach\n\nEvery article follows one idea: explain what the topic is, show why it matters, and describe what you can do about it. We keep adding new topics, so there is always something new to learn."},COL=['pink','yellow','mint','lavender'];let cfg=null,localPrev={};
+const pv=s=>localPrev[s]||'../'+s;
+const b64=s=>btoa(unescape(encodeURIComponent(s)));
+async function gh(path,opt={}){const r=await fetch(GH+'/repos/'+cfg.owner+'/'+cfg.repo+path,{...opt,cache:'no-store',headers:{Authorization:'Bearer '+cfg.token,Accept:'application/vnd.github+json',...(opt.headers||{})}});
+if(r.status===401){if(cfg.ok)logout(true);throw new Error('Token galat ya expire ho gaya. Naya token banao.')}
+if(r.status===204)return {};const j=await r.json().catch(()=>({}));
+if(!r.ok)throw new Error(r.status===409||/does not match/.test(j.message||'')?'Conflict: file kisi aur ne badal di. Page refresh karke dobara try karo.':r.status===403?'GitHub ne mana kar diya (token ko Contents: Read and write permission chahiye).':(j.message||'GitHub error '+r.status));return j}
+const put=(path,content,msg,sha)=>gh('/contents/'+path,{method:'PUT',body:JSON.stringify({message:msg,content,branch:cfg.branch,...(sha?{sha}:{})})});
+const del=(path,sha,msg)=>gh('/contents/'+path,{method:'DELETE',body:JSON.stringify({message:msg,sha,branch:cfg.branch})});
+async function getFile(path){try{const j=await gh('/contents/'+path+'?ref='+encodeURIComponent(cfg.branch));return {text:decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))),sha:j.sha}}catch(e){if(/Not Found/i.test(e.message))return null;throw e}}
+function normalize(a){const S=x=>x==null?'':String(x),s=S(a.slug).trim().toLowerCase();
+if(!/^[a-z0-9][a-z0-9-]{0,80}$/.test(s))throw new Error('Slug sirf small letters, numbers aur - se banta hai.');if(!S(a.title).trim())throw new Error('Title zaroori hai.');
+return {slug:s,title:S(a.title).trim(),category:S(a.category).trim(),excerpt:S(a.excerpt).trim(),date:/^\d{4}-\d\d-\d\d$/.test(a.date)?a.date:new Date().toISOString().slice(0,10),status:a.status==='draft'?'draft':'published',color:COL.includes(a.color)?a.color:'pink',image:S(a.image),image_alt:S(a.image_alt),image_caption:S(a.image_caption),
+blocks:(a.blocks||[]).map(b=>b.t==='h2'||b.t==='p'?{t:b.t,text:S(b.text)}:b.t==='ul'||b.t==='ol'?{t:b.t,items:(b.items||[]).map(S).filter(x=>x.trim())}:b.t==='img'?{t:'img',src:S(b.src),alt:S(b.alt),caption:S(b.caption)}:null).filter(Boolean),
+faq:(a.faq||[]).filter(f=>S(f.q).trim()).map(f=>({q:S(f.q).trim(),a:S(f.a).trim()})),takeaway:S(a.takeaway).trim()}}
+const LBL=/^([A-Z][^.:?!]{2,60}):\s+(\S[\s\S]*)$/;
+function toBlocks(bl){const out=[];let flag=false;const add=(k,t)=>{const l=out[out.length-1];if(l&&l.t===k)l.items.push(t);else out.push({t:k,items:[t]})};
+for(const b of bl){const n=b.match(/^\d+\.\s+([\s\S]*)$/),u=b.match(/^[-•*]\s+([\s\S]*)$/);
+if(n){add('ol',n[1]);flag=false}else if(u){add('ul',u[1]);flag=false}else if(LBL.test(b)&&!b.endsWith(':')){add('ul',b);flag=false}else if(flag&&b.length<=70)add('ul',b);else{out.push({t:'p',text:b});flag=b.endsWith(':')}}
+return out}
+function parseText(t){const bl=t.replace(/\r/g,'').split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean);
+const a={title:'',excerpt:'',slug:'',category:'',blocks:[],faq:[],takeaway:''};if(!bl.length)return a;
+a.title=bl.shift().replace(/^[# ]+/,'').trim();const marked=bl.some(b=>b.startsWith('# '));const secs=[[null,[]]];let flag=false;
+bl.forEach((b,i)=>{const nxt=bl[i+1];let head=b.startsWith('# ')?b.slice(2).trim():null;
+const kw=/^(frequently asked|faq\b|final thoughts|conclusion|seo details)/i.test(b)&&!b.includes('\n')&&b.length<=60;const cs=(secs[secs.length-1][0]||'').toLowerCase();
+if(head===null&&kw)head=b;
+else if(head===null&&!marked&&!flag&&!b.includes('\n')&&b.length<=90&&nxt&&!/[.:;,!]$/.test(b)&&!/^(\d+\.|[-•*])\s/.test(b)&&!LBL.test(b)&&!b.startsWith('**')&&!(cs.startsWith('frequently')||cs.startsWith('faq')))head=b;
+if(head!==null){secs.push([head,[]]);flag=false}else{secs[secs.length-1][1].push(b);flag=b.endsWith(':')||(flag&&b.length<=70)}});
+for(const [head,bs] of secs){const low=(head||'').toLowerCase();
+if(low.startsWith('seo')){for(const b of bs){const i=b.indexOf(':'),k=b.slice(0,i).trim().toLowerCase(),v=b.slice(i+1).trim();if(k==='meta description')a.excerpt=v;else if(k==='url slug')a.slug=v;else if(k==='primary keyword')a.category=v}}
+else if(low.startsWith('frequently')||low.startsWith('faq')){for(let j=0;j<bs.length-1;j+=2)a.faq.push({q:bs[j].replace(/^\*+|\*+$/g,'').trim(),a:bs[j+1]})}
+else if(low.startsWith('final thoughts')||low.startsWith('conclusion')){a.blocks.push({t:'h2',text:'Final thoughts'});if(bs.length>1){a.blocks.push(...toBlocks(bs.slice(0,-1)));a.takeaway=bs[bs.length-1]}else a.takeaway=bs[0]||'';if(a.blocks[a.blocks.length-1].t==='h2')a.blocks.pop()}
+else{if(head)a.blocks.push({t:'h2',text:head});a.blocks.push(...toBlocks(bs))}}
+return a}
+let wt;function watch(){clearTimeout(wt);const el=$('#st'),t0=Date.now()-3000;el.textContent='Site update ho rahi hai…';let n=0;
+const tick=async()=>{try{const j=await gh('/actions/runs?per_page=1&branch='+encodeURIComponent(cfg.branch));const r=j.workflow_runs&&j.workflow_runs[0];
+if(r&&new Date(r.created_at).getTime()>=t0&&r.status==='completed'){el.textContent=r.conclusion==='success'?'✓ Site live hai':'⚠ Build fail hua (GitHub > Actions dekho)';return}}catch(e){el.textContent='Site 1–2 minute mein update hogi';return}
+if(++n<40)wt=setTimeout(tick,5000);else el.textContent='Site 1–2 minute mein update hogi'};wt=setTimeout(tick,6000)}
+async function api(p,d){
+if(p==='/api/articles'){let l=[];try{l=await gh('/contents/data/articles?ref='+encodeURIComponent(cfg.branch))}catch(e){if(!/Not Found/i.test(e.message))throw e}
+const arts=(await Promise.all(l.filter(f=>f.name.endsWith('.json')).map(async f=>{const x=await getFile(f.path);try{return JSON.parse(x.text)}catch(e){return null}}))).filter(Boolean);
+return arts.sort((a,b)=>((b.date||'')+b.slug).localeCompare((a.date||'')+a.slug))}
+if(p==='/api/article'){const a=normalize(d.article),o=d.old_slug,path='data/articles/'+a.slug+'.json',ex=await getFile(path);
+if(a.slug!==o&&ex)throw new Error('Is slug ka article pehle se hai.');
+await put(path,b64(JSON.stringify(a,null,2)),'Article: '+a.title,ex?ex.sha:undefined);
+if(o&&o!==a.slug){const old=await getFile('data/articles/'+o+'.json');if(old)await del('data/articles/'+o+'.json',old.sha,'Rename article')}
+watch();return {ok:true,slug:a.slug}}
+if(p==='/api/delete'){const path='data/articles/'+d.slug+'.json',f=await getFile(path);if(f)await del(path,f.sha,'Delete article');watch();return {ok:true}}
+if(p==='/api/settings'&&d===undefined){const f=await getFile('data/settings.json');return {...DEF,...(f?JSON.parse(f.text):{})}}
+if(p==='/api/settings'){const f=await getFile('data/settings.json'),o={};for(const k in DEF)o[k]=String(d[k]==null?DEF[k]:d[k]);await put('data/settings.json',b64(JSON.stringify(o,null,2)),'Update settings',f?f.sha:undefined);watch();return {ok:true}}
+if(p==='/api/parse')return parseText(d.text||'');
+if(p==='/api/upload'){const ext={'image/png':'png','image/jpeg':'jpg','image/webp':'webp','image/gif':'gif','image/svg+xml':'svg'},m=/^data:([\w\/+.-]+);base64,(.+)$/.exec(d.data||'');
+if(!m||!ext[m[1]])throw new Error('Sirf png, jpg, webp, gif ya svg image allowed hai.');if(m[2].length>11e6)throw new Error('Image 8 MB se badi hai.');
+const base=(String(d.name||'image').replace(/\.[^.]*$/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40))||'image',fn=base+'-'+Math.floor(Date.now()/1000)+'.'+ext[m[1]];
+await put('public/images/posts/'+fn,m[2],'Upload image '+fn);localPrev['images/posts/'+fn]=d.data;return {path:'images/posts/'+fn}}
+throw new Error('Unknown action')}
+function store(remember){(remember?localStorage:sessionStorage).setItem('wim_gh',JSON.stringify({owner:cfg.owner,repo:cfg.repo,token:cfg.token,branch:cfg.branch}))}
+function logout(reload){localStorage.removeItem('wim_gh');sessionStorage.removeItem('wim_gh');if(reload!==false)location.reload()}
+async function verify(){cfg.ok=false;let j;try{j=await gh('')}catch(e){throw new Error(/Not Found/i.test(e.message)?'Repo nahi mila, ya is token ko is repo ka access nahi hai. Username aur repo ka naam check karo.':e.message)}
+if(j.permissions&&!j.permissions.push)throw new Error('Is token ko is repo mein likhne ki permission nahi hai (Contents: Read and write chahiye).');cfg.ok=true;return j}
+function start(){document.body.classList.remove('locked');$('#gate').hidden=true;list()}
+//GH_LAYER_END
+
 function toast(m,e){const t=$('#toast');t.textContent=m;t.className=e?'err':'';t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500)}
 const slugify=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,70);
 function show(v){['list','edit','set'].forEach(x=>{$('#v-'+x).hidden=x!==v;});$('#n-list').className=v==='list'?'on':'';$('#n-set').className=v==='set'?'on':'';$('#n-new').className=''}
 async function list(){const a=await api('/api/articles');show('list');$('#none').hidden=a.length>0;
-$('#rows').innerHTML=a.map(x=>`<tr><td><b>${esc(x.title)}</b></td><td>${esc(x.category)}</td><td>${x.date}</td><td><span class="pill ${x.status}">${x.status}</span></td><td><button class="sm" data-e="${x.slug}">Edit</button> <a class="btn sm" target="_blank" href="/site/index.html#${x.slug}">View</a> <button class="sm del" data-d="${x.slug}">Delete</button></td></tr>`).join('');window._a=a}
+$('#rows').innerHTML=a.map(x=>`<tr><td><b>${esc(x.title)}</b></td><td>${esc(x.category)}</td><td>${x.date}</td><td><span class="pill ${x.status}">${x.status}</span></td><td><button class="sm" data-e="${x.slug}">Edit</button> <a class="btn sm" target="_blank" href="../#${x.slug}">View</a> <button class="sm del" data-d="${x.slug}">Delete</button></td></tr>`).join('');window._a=a}
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function edit(a){a=a||{slug:'',title:'',category:'',excerpt:'',date:new Date().toISOString().slice(0,10),status:'published',color:'pink',blocks:[],faq:[],takeaway:'',image:'',image_alt:'',image_caption:''};
 old=a.slug;cur=a;$('#et').textContent=old?'Edit article':'New article';
 $('#title').value=a.title;$('#slug').value=a.slug;$('#cat').value=a.category;$('#date').value=a.date;$('#status').value=a.status;$('#color').value=a.color;$('#exc').value=a.excerpt;$('#take').value=a.takeaway;
 img={src:a.image,alt:a.image_alt,caption:a.image_caption};blocks=JSON.parse(JSON.stringify(a.blocks));faq=JSON.parse(JSON.stringify(a.faq));
-$('#falt').value=img.alt;$('#fcap').value=img.caption;fimg();rb();rf();$('#vw').hidden=!old;if(old)$('#vw').href='/site/index.html#'+old;show('edit');$('#n-new').className=old?'':'on'}
-function fimg(){$('#fprev').hidden=$('#frm').hidden=!img.src;if(img.src)$('#fprev').src='/site/'+img.src}
+$('#falt').value=img.alt;$('#fcap').value=img.caption;fimg();rb();rf();$('#vw').hidden=!old;if(old)$('#vw').href='../#'+old;show('edit');$('#n-new').className=old?'':'on'}
+function fimg(){$('#fprev').hidden=$('#frm').hidden=!img.src;if(img.src)$('#fprev').src=pv(img.src)}
 function resize(file){return new Promise((ok,no)=>{const r=new FileReader();r.onerror=no;r.onload=()=>{if(file.type==='image/svg+xml'||file.type==='image/gif')return ok(r.result);const i=new Image();i.onerror=no;i.onload=()=>{const k=Math.min(1,1600/i.width),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);ok(c.toDataURL('image/webp',.85))};i.src=r.result};r.readAsDataURL(file)})}
 async function upload(file){const data=await resize(file);return (await api('/api/upload',{name:file.name,data})).path}
 function rb(){const el=$('#blocks');el.innerHTML='';const N={h2:'Heading',p:'Paragraph',ul:'Bullet list',ol:'Numbered list',img:'Image'};
@@ -78,7 +147,7 @@ blocks.forEach((b,i)=>{const d=document.createElement('div');d.className='blk';
 d.innerHTML=`<div class="hd"><b>${N[b.t]}</b><button class="sm" data-m="-1">↑</button><button class="sm" data-m="1">↓</button><button class="sm del" data-x="1">✕</button></div>`;
 let f;if(b.t==='h2'){f=document.createElement('input');f.value=b.text;f.oninput=()=>b.text=f.value;d.append(f)}
 else if(b.t==='p'){f=document.createElement('textarea');f.value=b.text;f.oninput=()=>b.text=f.value;d.append(f)}
-else if(b.t==='img'){d.insertAdjacentHTML('beforeend',`<input type="file" accept="image/*">${b.src?`<img class="prev" src="/site/${esc(b.src)}">`:''}<label>Alt text</label><input data-k="alt" value="${esc(b.alt)}"><label>Caption (optional)</label><input data-k="caption" value="${esc(b.caption)}">`);
+else if(b.t==='img'){d.insertAdjacentHTML('beforeend',`<input type="file" accept="image/*">${b.src?`<img class="prev" src="${esc(pv(b.src))}">`:''}<label>Alt text</label><input data-k="alt" value="${esc(b.alt)}"><label>Caption (optional)</label><input data-k="caption" value="${esc(b.caption)}">`);
 d.querySelector('[type=file]').onchange=async e=>{try{b.src=await upload(e.target.files[0]);rb()}catch(x){toast(x.message,1)}};d.querySelectorAll('[data-k]').forEach(x=>x.oninput=()=>b[x.dataset.k]=x.value)}
 else{f=document.createElement('textarea');f.placeholder='Ek line = ek point';f.value=b.items.join('\n');f.oninput=()=>b.items=f.value.split('\n').filter(x=>x.trim());d.append(f)}
 d.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{const j=i+ +x.dataset.m;if(j<0||j>=blocks.length)return;[blocks[i],blocks[j]]=[blocks[j],blocks[i]];rb()});
@@ -91,7 +160,7 @@ $('#fimg').onchange=async e=>{try{img.src=await upload(e.target.files[0]);fimg()
 document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const t=b.dataset.add;blocks.push(t==='img'?{t,src:'',alt:'',caption:''}:t==='ul'||t==='ol'?{t,items:[]}:{t,text:''});rb()});
 $('#addfaq').onclick=()=>{faq.push({q:'',a:''});rf()};
 $('#save').onclick=async()=>{const a={slug:$('#slug').value.trim()||slugify($('#title').value),title:$('#title').value,category:$('#cat').value,excerpt:$('#exc').value,date:$('#date').value,status:$('#status').value,color:$('#color').value,takeaway:$('#take').value,image:img.src,image_alt:$('#falt').value,image_caption:$('#fcap').value,blocks,faq};
-try{const r=await api('/api/article',{article:a,old_slug:old});old=r.slug;$('#vw').hidden=false;$('#vw').href='/site/index.html#'+r.slug;$('#et').textContent='Edit article';toast('Saved! Site update ho gayi ('+r.live+' articles live).')}catch(x){toast(x.message,1)}};
+try{const r=await api('/api/article',{article:a,old_slug:old});old=r.slug;$('#vw').hidden=false;$('#vw').href='../#'+r.slug;$('#et').textContent='Edit article';toast('Saved! Site 1–2 minute mein live ho jayegi.')}catch(x){toast(x.message,1)}};
 $('#cancel').onclick=list;$('#n-list').onclick=list;$('#n-new').onclick=()=>edit();
 $('#rows').onclick=async e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.e)edit(window._a.find(x=>x.slug===b.dataset.e));
 if(b.dataset.d&&confirm('Ye article delete karna hai? Ye wapas nahi aayega.')){await api('/api/delete',{slug:b.dataset.d});toast('Deleted.');list()}};
@@ -101,7 +170,12 @@ $('#title').value=a.title;if(!old)$('#slug').value=a.slug||slugify(a.title);if(a
 const SK=['contact_email','hero_title','hero_text','blog_intro','about_intro','about_text'];
 $('#n-set').onclick=async()=>{const s=await api('/api/settings');SK.forEach(k=>$('#s_'+k).value=s[k]);show('set')};
 $('#saveset').onclick=async()=>{const d={};SK.forEach(k=>d[k]=$('#s_'+k).value);try{await api('/api/settings',d);toast('Settings save ho gayi.')}catch(x){toast(x.message,1)}};
-$('#logout').onclick=async()=>{try{await api('/api/logout',{})}catch(x){}location.reload()};
-$('#savepw').onclick=async()=>{if($('#pw_new').value!==$('#pw_new2').value)return toast('Naye passwords match nahi karte.',1);try{await api('/api/password',{old:$('#pw_old').value,new:$('#pw_new').value});['#pw_old','#pw_new','#pw_new2'].forEach(s=>$(s).value='');toast('Password badal gaya.')}catch(x){toast(x.message,1)}};
-list();
+$('#logout').onclick=()=>logout(true);
+$('#gf').onsubmit=async e=>{e.preventDefault();$('#gerr').textContent='';$('#gb').disabled=true;cfg={owner:$('#g_owner').value.trim(),repo:$('#g_repo').value.trim(),token:$('#g_token').value.trim(),branch:'main'};
+try{const j=await verify();cfg.branch=j.default_branch||'main';store($('#g_rem').checked);$('#g_token').value='';start()}catch(x){cfg=null;$('#gerr').textContent=x.message}$('#gb').disabled=false};
+async function boot(){const host=location.hostname.endsWith('.github.io')?location.hostname.split('.')[0]:'';$('#g_owner').value=host;$('#g_repo').value=host?host+'.github.io':'';
+const c=sessionStorage.getItem('wim_gh')||localStorage.getItem('wim_gh');
+if(c){try{cfg=JSON.parse(c);const j=await verify();cfg.branch=j.default_branch||cfg.branch;return start()}catch(x){logout(false);cfg=null}}
+$('#gate').hidden=false}
+boot();
 </script></body></html>

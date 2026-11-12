@@ -1,50 +1,53 @@
-WHY IT MATTERS - DASHBOARD (kaise use karein)
-=============================================
+WHY IT MATTERS - GITHUB PAGES + DASHBOARD
+==========================================
 
-Ek baar ka setup
-- Computer mein Python 3 hona chahiye (python.org se free). Kuch aur install nahi karna.
+Ye kaise kaam karta hai
+- Website GitHub Pages par free host hoti hai.
+- Dashboard bhi usi site par hai:  https://AAPKA-USERNAME.github.io/dashboard/
+- Dashboard mein login GitHub token se hota hai. Token ke bina koi article add/edit/delete
+  nahi kar sakta. Article save karte hi GitHub par save hota hai aur site 1-2 minute mein
+  apne aap update ho jati hai. Database ya server nahi chahiye.
 
-Dashboard kholna
-- Windows : start-dashboard.bat par double-click
-- Mac/Linux: start-dashboard.command par double-click
-  (ya terminal mein:  python3 admin.py)
-- Browser mein dashboard apne aap khul jayega (http://localhost:8000).
-- Band karne ke liye black window band kar do ya Ctrl+C dabao.
+SETUP (sirf ek baar)
+1. GitHub repo mein purani saari files hata do (ya naya repo banao: username.github.io).
+2. Is ZIP ki SAARI files/folders repo ke root mein upload karo, jisme ".github" folder bhi hai.
+   (Agar ".github" folder upload nahi hua: Add file > Create new file, naam likho
+    .github/workflows/deploy.yml aur is ZIP wali deploy.yml ka text paste karo.)
+3. Repo > Settings > Pages > "Build and deployment" > Source: "GitHub Actions".
+4. Repo > Actions tab mein "Build and deploy site" chalegi. Green hone ka wait karo.
+   Phir site khulegi: https://username.github.io/
 
-Login
-- Pehli baar dashboard khologe to "Create your login" page aayega. Apna username aur
-  password banao (password kam se kam 8 characters). Ye yaad rakhna.
-- Uske baad har baar login page aayega. Bina login ke dashboard, articles, images aur ZIP
-  kuch nahi khulta.
-- 5 baar galat password dalne par thodi der ke liye login ruk jata hai.
-- Password badalna: Dashboard > Settings > Change password.
-- Password bhool gaye? data/auth.json file delete kar do, phir dashboard dobara kholo aur
-  naya login bana lo. (Articles ko kuch nahi hota.)
-- Logout: dashboard ke upar "Logout" button.
-- Dhyan rahe: dashboard sirf aapke computer par (localhost) chalta hai. Ise internet par
-  mat chalana.
+TOKEN BANANA (dashboard login ke liye)
+1. GitHub > Settings > Developer settings > Personal access tokens > Fine-grained tokens
+   > Generate new token.
+2. Repository access: "Only select repositories" > apna site repo.
+3. Permissions > Repository permissions:
+   - Contents: Read and write   (zaroori)
+   - Actions: Read-only          (optional, site status dikhane ke liye)
+4. Generate karke token copy karo (sirf ek baar dikhta hai) aur safe jagah rakho.
+5. Dashboard kholo > username + repo ka naam + token daalo > Login.
+   "Is device par yaad rakho" tick karoge to dobara token nahi daalna padega.
+   Shared computer par tick mat karo, aur kaam ke baad Logout karo.
 
-Naya article daalna
-1. "+ New article" dabao.
-2. Title, category, short description bharo, colour chuno.
-3. Feature image upload karo.
-4. Content blocks se heading / paragraph / list / image daalo.
-   Image block se article ke beech mein kahin bhi image laga sakte ho.
-5. Chaho to FAQ aur final takeaway bhi daalo.
-6. "Save & update site" dabao. Site ki files apne aap ban/update ho jati hain.
-   Draft chunoge to article site par nahi dikhega.
+ARTICLE DAALNA
+- "+ New article" > details, feature image, content blocks (heading, paragraph, lists, image),
+  FAQ, takeaway > "Save & update site".
+- Draft chunoge to article site par nahi dikhega.
+- Pehle se likha article ho to "Paste article text" se paste karo.
 
-Pehle se likha article: "Paste article text" se paste karo, form apne aap fill ho jayega.
+SECURITY
+- Token = password. Kisi ko mat do. Shak ho to GitHub mein token delete/revoke kar do.
+- Token ki expiry date hoti hai. Expire hone par naya token banao aur dobara login karo.
+- Repo public ho to articles ki files sabko dikhti hain (site ki tarah). Token kabhi repo
+  mein mat daalna.
 
-Site live karna
-- Dashboard mein "Download site ZIP" dabao.
-- Us ZIP ki sab files apni hosting par upload karo (purani files replace).
-- Dashboard sirf aapke computer par chalta hai. Live site sirf simple HTML/CSS files hain,
-  isliye koi database ya server ki zaroorat nahi.
+FOLDERS
+- data/      articles (har article ek .json) aur settings
+- public/    site ki design files, logo, images
+- dashboard/ index.html = online dashboard (GitHub mode), local.html = computer wala purana
+- admin.py   site banane wala script (GitHub Actions khud chalata hai)
+- .github/   automatic build ka setup
 
-Folders
-- public/     -> asli website (yahi upload hota hai)
-- data/       -> articles (har article ek .json file) aur settings
-- dashboard/  -> dashboard ka design (upload nahi karna)
-- templates/  -> site ke upar/neeche ka hissa (menu, footer)
-- Backup lena ho to poora folder copy kar lo, khaaskar data/ aur public/.
+OPTIONAL: computer par offline chalana
+- start-dashboard.bat / start-dashboard.command (Python 3 chahiye). Ye local.html wala
+  dashboard kholta hai, apne login ke saath.
