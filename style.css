@@ -66,7 +66,7 @@ body:not(:has(main>:target)) #home{display:block}
 
 /* article */
 article{--c:var(--pink)}
-#deepfakes{--c:var(--yellow)}#privacy{--c:var(--mint)}
+#sleep{--c:var(--yellow)}#finance{--c:var(--mint)}
 .top{background:var(--c);border-bottom:2px solid #3d3b78}
 .top .wrap{padding-top:44px;padding-bottom:56px;max-width:860px}
 .top h1{color:#3d3b78;font-size:clamp(2rem,6vw,3.8rem);font-weight:800;letter-spacing:-.02em}
@@ -94,3 +94,6 @@ footer .wrap{display:flex;gap:14px;justify-content:space-between;flex-wrap:wrap}
 .figure{max-width:860px;margin:-34px auto 0;padding:0 22px;position:relative}
 .figure img{display:block;width:100%;height:auto;border:2px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 rgba(61,59,120,.25);background:#fff}
 .figure p{font:.9rem var(--head);color:#6d6b99;margin:10px 4px 0}
+
+.body ol{padding-left:1.3em}.body ol li{margin-bottom:14px}
+.lead{font-size:1.25rem;line-height:1.65}
