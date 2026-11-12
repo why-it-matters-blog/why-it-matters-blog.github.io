@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login – Why It Matters Dashboard</title><link rel="icon" href="/site/favicon.svg" type="image/svg+xml">
+<style>
+:root{--ink:#3d3b78;font-family:"Trebuchet MS",system-ui,sans-serif}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#e9e4ff;color:#2d2b5c;padding:20px}
+.box{width:min(420px,100%);background:#fff;border:2px solid var(--ink);border-radius:24px;padding:30px;box-shadow:8px 8px 0 rgba(61,59,120,.25)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;color:var(--ink);margin-bottom:6px}.logo img{width:46px}
+h1{font-size:1.5rem;color:var(--ink);margin:18px 0 6px}p{margin:0 0 8px;color:#6d6b99;font-size:.95rem}
+label{display:block;font-weight:700;font-size:.9rem;color:var(--ink);margin:14px 0 4px}
+input{width:100%;font-size:1rem;font-family:inherit;padding:11px 13px;border:2px solid #d9d4f5;border-radius:12px}input:focus{outline:none;border-color:var(--ink)}
+button{margin-top:20px;width:100%;font-family:inherit;font-weight:700;font-size:1rem;padding:12px;border-radius:999px;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}button:hover{background:#2e2c5f}
+#err{color:#c0446e;font-weight:700;font-size:.9rem;margin-top:12px;min-height:1.2em}
+</style></head><body><form class="box" id="f">
+<div class="logo"><img src="/site/logo.svg" alt="">why it matters</div>
+<h1 id="h">Login</h1><p id="s">Dashboard mein jaane ke liye login karo.</p>
+<label for="u">Username</label><input id="u" autocomplete="username" required>
+<label for="p">Password</label><input id="p" type="password" autocomplete="current-password" required>
+<div id="r" hidden><label for="p2">Repeat password</label><input id="p2" type="password" autocomplete="new-password"></div>
+<button id="b">Login</button><div id="err" role="alert"></div></form>
+<script>
+let setup=false;const $=s=>document.querySelector(s);
+fetch('/api/status').then(r=>r.json()).then(j=>{if(j.authed)return location.reload();setup=j.setup;if(setup){$('#h').textContent='Create your login';$('#s').textContent='Pehli baar: apna username aur password banao (password kam se kam 8 characters). Isse yaad rakhna.';$('#r').hidden=false;$('#p2').required=true;$('#p').autocomplete='new-password';$('#b').textContent='Create login'}});
+$('#f').onsubmit=async e=>{e.preventDefault();$('#err').textContent='';
+if(setup&&$('#p').value!==$('#p2').value)return $('#err').textContent='Dono passwords match nahi karte.';
+const r=await fetch(setup?'/api/setup':'/api/login',{method:'POST',headers:{'Content-Type':'application/json','X-Admin':'1'},body:JSON.stringify({username:$('#u').value,password:$('#p').value})});
+const j=await r.json();if(r.ok)location.reload();else $('#err').textContent=j.error||'Error'};
+</script></body></html>

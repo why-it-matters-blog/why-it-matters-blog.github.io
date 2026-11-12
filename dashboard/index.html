@@ -28,7 +28,7 @@ dialog{border:2px solid var(--ink);border-radius:18px;width:min(720px,94vw);padd
 </style></head><body>
 <header><img src="/site/logo.svg" alt=""><b>why it matters · dashboard</b>
 <nav><button id="n-list" class="on">Articles</button> <button id="n-new">+ New article</button> <button id="n-set">Settings</button></nav><span class="sp"></span>
-<a class="btn" href="/site/index.html" target="_blank">Preview site</a> <a class="btn" href="/api/zip">Download site ZIP</a></header>
+<a class="btn" href="/site/index.html" target="_blank">Preview site</a> <a class="btn" href="/api/zip">Download site ZIP</a> <button id="logout">Logout</button></header>
 <main>
 <section id="v-list"><h2>Articles</h2><div class="card"><table><thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table><p class="hint" id="none" hidden>Abhi koi article nahi hai. “New article” se shuru karo.</p></div>
 <div class="card"><b>Site ko live kaise karein?</b><p class="hint">Har save ke baad <code>public</code> folder apne aap update ho jata hai. Live karne ke liye “Download site ZIP” dabao, aur uski files hosting par upload kar do (purani files replace karni hongi).</p></div></section>
@@ -52,12 +52,13 @@ dialog{border:2px solid var(--ink);border-radius:18px;width:min(720px,94vw);padd
 <label>Blog page text</label><textarea id="s_blog_intro" style="min-height:70px"></textarea>
 <label>About us – top line</label><textarea id="s_about_intro" style="min-height:70px"></textarea>
 <label>About us – content <small>(heading ke liye line ki shuruaat “# ” se karo; paragraphs ke beech khali line)</small></label><textarea id="s_about_text" style="min-height:220px"></textarea>
-<p><button class="pri" id="saveset">Save settings</button></p></div></section></main>
+<p><button class="pri" id="saveset">Save settings</button></p></div>
+<div class="card"><b>Change password</b><label>Current password</label><input id="pw_old" type="password" autocomplete="current-password"><div class="row"><div><label>New password <small>(kam se kam 8 characters)</small></label><input id="pw_new" type="password" autocomplete="new-password"></div><div><label>Repeat new password</label><input id="pw_new2" type="password" autocomplete="new-password"></div></div><p><button id="savepw">Change password</button></p></div></section></main>
 <dialog id="dlg"><b>Paste article text</b><p class="hint">Poora article yahan paste karo. Pehli line title hoti hai. Heading “# ” se ya alag short line se pehchani jaati hai.</p><textarea id="paste"></textarea><p><button class="pri" id="doimp">Fill the form</button> <button id="closeimp">Cancel</button></p></dialog>
 <div id="toast"></div>
 <script>
 const $=s=>document.querySelector(s);let cur=null,old='',blocks=[],faq=[],img={src:'',alt:'',caption:''};
-const api=(p,d)=>fetch(p,d===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-Admin':'1'},body:JSON.stringify(d)}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j});
+const api=(p,d)=>fetch(p,d===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-Admin':'1'},body:JSON.stringify(d)}).then(async r=>{if(r.status===401){location.reload();throw new Error('Login zaroori hai.')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j});
 function toast(m,e){const t=$('#toast');t.textContent=m;t.className=e?'err':'';t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500)}
 const slugify=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,70);
 function show(v){['list','edit','set'].forEach(x=>{$('#v-'+x).hidden=x!==v;});$('#n-list').className=v==='list'?'on':'';$('#n-set').className=v==='set'?'on':'';$('#n-new').className=''}
@@ -100,5 +101,7 @@ $('#title').value=a.title;if(!old)$('#slug').value=a.slug||slugify(a.title);if(a
 const SK=['contact_email','hero_title','hero_text','blog_intro','about_intro','about_text'];
 $('#n-set').onclick=async()=>{const s=await api('/api/settings');SK.forEach(k=>$('#s_'+k).value=s[k]);show('set')};
 $('#saveset').onclick=async()=>{const d={};SK.forEach(k=>d[k]=$('#s_'+k).value);try{await api('/api/settings',d);toast('Settings save ho gayi.')}catch(x){toast(x.message,1)}};
+$('#logout').onclick=async()=>{try{await api('/api/logout',{})}catch(x){}location.reload()};
+$('#savepw').onclick=async()=>{if($('#pw_new').value!==$('#pw_new2').value)return toast('Naye passwords match nahi karte.',1);try{await api('/api/password',{old:$('#pw_old').value,new:$('#pw_new').value});['#pw_old','#pw_new','#pw_new2'].forEach(s=>$(s).value='');toast('Password badal gaya.')}catch(x){toast(x.message,1)}};
 list();
 </script></body></html>

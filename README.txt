@@ -11,6 +11,19 @@ Dashboard kholna
 - Browser mein dashboard apne aap khul jayega (http://localhost:8000).
 - Band karne ke liye black window band kar do ya Ctrl+C dabao.
 
+Login
+- Pehli baar dashboard khologe to "Create your login" page aayega. Apna username aur
+  password banao (password kam se kam 8 characters). Ye yaad rakhna.
+- Uske baad har baar login page aayega. Bina login ke dashboard, articles, images aur ZIP
+  kuch nahi khulta.
+- 5 baar galat password dalne par thodi der ke liye login ruk jata hai.
+- Password badalna: Dashboard > Settings > Change password.
+- Password bhool gaye? data/auth.json file delete kar do, phir dashboard dobara kholo aur
+  naya login bana lo. (Articles ko kuch nahi hota.)
+- Logout: dashboard ke upar "Logout" button.
+- Dhyan rahe: dashboard sirf aapke computer par (localhost) chalta hai. Ise internet par
+  mat chalana.
+
 Naya article daalna
 1. "+ New article" dabao.
 2. Title, category, short description bharo, colour chuno.

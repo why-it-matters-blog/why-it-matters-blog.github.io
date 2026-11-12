@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Why It Matters - local dashboard + static site generator (Python 3, no extra installs)."""
-import base64, datetime, html, io, json, mimetypes, os, re, sys, threading, time, webbrowser, zipfile
+import base64, datetime, hashlib, hmac, html, io, json, mimetypes, os, re, secrets, sys, threading, time, webbrowser, zipfile
+from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
@@ -62,6 +63,17 @@ def clean(a):
         'faq': [{'q': str(f.get('q', '')).strip(), 'a': str(f.get('a', '')).strip()} for f in a.get('faq', []) if str(f.get('q', '')).strip()],
         'takeaway': str(a.get('takeaway', '')).strip(),
     }
+
+# ---------- login ----------
+AUTH, SESS, FAIL = P('data', 'auth.json'), {}, {'n': 0, 'until': 0}
+SESSION_SECONDS = 12 * 3600
+def hash_pw(pw, salt): return hashlib.pbkdf2_hmac('sha256', pw.encode(), bytes.fromhex(salt), 200_000).hex()
+def set_auth(user, pw):
+    salt = secrets.token_hex(16); write_json(AUTH, {'user': user, 'salt': salt, 'hash': hash_pw(pw, salt)})
+def check_auth(user, pw):
+    a = read_json(AUTH, None)
+    return bool(a) and hmac.compare_digest(a['user'].encode(), user.encode()) and hmac.compare_digest(a['hash'].encode(), hash_pw(pw, a['salt']).encode())
+def cookie(tok, age=SESSION_SECONDS): return {'Set-Cookie': f'wim_session={tok}; HttpOnly; SameSite=Strict; Path=/; Max-Age={age}'}
 
 # ---------- pasted text -> article ----------
 LBL = re.compile(r'^([A-Z][^.:?!]{2,60}):\s+(\S.*)$', re.S)
@@ -209,10 +221,16 @@ class H(BaseHTTPRequestHandler):
         for k, v in (hdr or {}).items(): self.send_header(k, v)
         self.end_headers(); self.wfile.write(body)
     def local(self): return self.headers.get('Host', '').split(':')[0] in ('127.0.0.1', 'localhost')
+    def token(self):
+        c = SimpleCookie(self.headers.get('Cookie', '')); return c['wim_session'].value if 'wim_session' in c else ''
+    def authed(self):
+        t = self.token(); return bool(t) and SESS.get(t, 0) > time.time()
     def do_GET(self):
         if not self.local(): return self.out(403, {'error': 'forbidden'})
         u = urlparse(self.path); q = parse_qs(u.query)
-        if u.path == '/': return self.out(200, open(P('dashboard', 'index.html'), 'rb').read(), 'text/html')
+        if u.path == '/api/status': return self.out(200, {'setup': not os.path.exists(AUTH), 'authed': self.authed()})
+        if u.path == '/': return self.out(200, open(P('dashboard', 'index.html' if self.authed() else 'login.html'), 'rb').read(), 'text/html')
+        if u.path.startswith('/api/') and not self.authed(): return self.out(401, {'error': 'Login zaroori hai.'})
         if u.path == '/api/articles': return self.out(200, articles())
         if u.path == '/api/settings': return self.out(200, settings())
         if u.path == '/api/zip':
@@ -232,6 +250,30 @@ class H(BaseHTTPRequestHandler):
         try:
             d = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
             path = urlparse(self.path).path
+            if path == '/api/login':
+                if time.time() < FAIL['until']: raise ValueError(f"Bahut zyada galat koshish. {int(FAIL['until'] - time.time()) + 1} second baad try karo.")
+                if check_auth(str(d.get('username', '')), str(d.get('password', ''))):
+                    FAIL['n'] = 0; tok = secrets.token_urlsafe(32); SESS[tok] = time.time() + SESSION_SECONDS
+                    return self.out(200, {'ok': True}, hdr=cookie(tok))
+                FAIL['n'] += 1; time.sleep(0.7)
+                if FAIL['n'] >= 5: FAIL['until'] = time.time() + min(300, 30 * FAIL['n'])
+                raise ValueError('Username ya password galat hai.')
+            if path == '/api/setup':
+                if os.path.exists(AUTH): raise ValueError('Login pehle se bana hua hai.')
+                u_, p_ = str(d.get('username', '')).strip(), str(d.get('password', ''))
+                if len(u_) < 3: raise ValueError('Username kam se kam 3 characters ka rakho.')
+                if len(p_) < 8: raise ValueError('Password kam se kam 8 characters ka rakho.')
+                set_auth(u_, p_); tok = secrets.token_urlsafe(32); SESS[tok] = time.time() + SESSION_SECONDS
+                return self.out(200, {'ok': True}, hdr=cookie(tok))
+            if not self.authed(): return self.out(401, {'error': 'Login zaroori hai.'})
+            if path == '/api/logout':
+                SESS.pop(self.token(), None); return self.out(200, {'ok': True}, hdr=cookie('', 0))
+            if path == '/api/password':
+                a = read_json(AUTH, {})
+                if not check_auth(a.get('user', ''), str(d.get('old', ''))): raise ValueError('Purana password galat hai.')
+                if len(str(d.get('new', ''))) < 8: raise ValueError('Naya password kam se kam 8 characters ka rakho.')
+                set_auth(a['user'], str(d['new'])); keep = self.token(); SESS.clear(); SESS[keep] = time.time() + SESSION_SECONDS
+                return self.out(200, {'ok': True})
             if path == '/api/article':
                 a = clean(d['article']); old = d.get('old_slug', '')
                 if a['slug'] != old and os.path.exists(os.path.join(ARTS, a['slug'] + '.json')): raise ValueError('Is slug ka article pehle se hai.')
