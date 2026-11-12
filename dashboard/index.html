@@ -29,38 +29,38 @@ dialog{border:2px solid var(--ink);border-radius:18px;width:min(720px,94vw);padd
 .gbox{width:min(440px,100%);background:#fff;border:2px solid var(--ink);border-radius:24px;padding:28px;box-shadow:8px 8px 0 rgba(61,59,120,.25)}.gbox h1{color:var(--ink);font-size:1.5rem;margin:14px 0 6px}.gbox .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;color:var(--ink)}.gbox .logo img{width:44px}
 .gbox button.pri{width:100%;margin-top:16px;padding:12px}.chk{display:flex;gap:8px;align-items:center;font-weight:400}.chk input{width:auto}#gerr{color:#c0446e;font-weight:700;font-size:.9rem;margin-top:10px;min-height:1.2em}.gbox details{margin-top:12px;font-size:.9rem;color:#4b4880}.gbox summary{cursor:pointer;font-weight:700;color:var(--ink)}.gbox ol{padding-left:18px}
 </style></head><body class="locked">
-<div id="gate" hidden><form class="gbox" id="gf"><div class="logo"><img src="../logo.svg" alt="">why it matters</div><h1>Dashboard login</h1><p class="hint">Sirf wahi login kar sakta hai jiske paas is site ke GitHub repo ka access token ho.</p>
+<div id="gate" hidden><form class="gbox" id="gf"><div class="logo"><img src="../logo.svg" alt="">why it matters</div><h1>Dashboard login</h1><p class="hint">Only people with an access token for this site’s GitHub repository can log in.</p>
 <label>GitHub username</label><input id="g_owner" autocomplete="username" required><label>Repository name</label><input id="g_repo" required><label>Access token</label><input id="g_token" type="password" autocomplete="current-password" required>
-<label class="chk"><input type="checkbox" id="g_rem"> Is device par yaad rakho</label><button class="pri" id="gb">Login</button><div id="gerr" role="alert"></div>
-<details><summary>Token kaise banayein?</summary><ol><li>GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; <b>Fine-grained tokens</b> &rarr; Generate new token.</li><li>Repository access: <b>Only select repositories</b> &rarr; apni site ka repo.</li><li>Permissions &rarr; Contents: <b>Read and write</b> (Actions: Read-only bhi de do, site status dikhane ke liye).</li><li>Token copy karke yahan paste karo. Ye sirf ek baar dikhta hai.</li></ol></details></form></div>
+<label class="chk"><input type="checkbox" id="g_rem"> Remember me on this device</label><button class="pri" id="gb">Login</button><div id="gerr" role="alert"></div>
+<details><summary>How to create a token</summary><ol><li>GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; <b>Fine-grained tokens</b> &rarr; Generate new token.</li><li>Repository access: <b>Only select repositories</b> &rarr; your site’s repository.</li><li>Permissions &rarr; Contents: <b>Read and write</b> (also give Actions: Read-only so the site status can be shown).</li><li>Copy the token and paste it here. GitHub shows it only once.</li></ol></details></form></div>
 <header><img src="../logo.svg" alt=""><b>why it matters · dashboard</b>
 <nav><button id="n-list" class="on">Articles</button> <button id="n-new">+ New article</button> <button id="n-set">Settings</button></nav><span class="sp"></span>
 <span id="st" class="hint" style="margin:0"></span> <a class="btn" href="../" target="_blank">Open live site</a> <button id="logout">Logout</button></header>
 <main>
-<section id="v-list"><h2>Articles</h2><div class="card"><table><thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table><p class="hint" id="none" hidden>Abhi koi article nahi hai. “New article” se shuru karo.</p></div>
-<div class="card"><b>Site live kaise hoti hai?</b><p class="hint">Save karte hi article GitHub par save hota hai aur 1–2 minute mein site apne aap update ho jaati hai. Upar status dikhta rahega. Kuch upload nahi karna padta.</p></div></section>
+<section id="v-list"><h2>Articles</h2><div class="card"><table><thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table><p class="hint" id="none" hidden>No articles yet. Click “New article” to get started.</p></div>
+<div class="card"><b>How does the site go live?</b><p class="hint">When you save, the article is stored on GitHub and the site updates automatically within 1–2 minutes. The status is shown at the top. You do not need to upload anything.</p></div></section>
 
 <section id="v-edit" hidden><h2 id="et">New article</h2>
-<div class="card"><p class="hint">Pehle se likha article hai? <button class="sm" id="imp">Paste article text</button> (heading, lists, FAQ aur SEO details apne aap fill ho jayenge)</p>
-<label>Title</label><input id="title"><div class="row"><div><label>Slug <small>(URL ka naam)</small></label><input id="slug"></div><div><label>Category</label><input id="cat" placeholder="e.g. Health"></div></div>
-<div class="row"><div><label>Date</label><input id="date" type="date"></div><div><label>Status</label><select id="status"><option value="published">Published</option><option value="draft">Draft (site par nahi dikhega)</option></select></div><div><label>Colour</label><select id="color"><option value="pink">Pink</option><option value="yellow">Yellow</option><option value="mint">Mint</option><option value="lavender">Lavender</option></select></div></div>
-<label>Short description <small>(card par aur article ke upar dikhta hai)</small></label><textarea id="exc" style="min-height:70px"></textarea></div>
-<div class="card"><b>Feature image</b><p class="hint">Card aur article ke top par dikhegi. Badi photos apne aap chhoti ho jaati hain.</p><input type="file" id="fimg" accept="image/*"><img id="fprev" class="prev" hidden>
+<div class="card"><p class="hint">Already have the article written? <button class="sm" id="imp">Paste article text</button> (headings, lists, FAQ and SEO details are filled in automatically)</p>
+<label>Title</label><input id="title"><div class="row"><div><label>Slug <small>(used in the web address)</small></label><input id="slug"></div><div><label>Category</label><input id="cat" placeholder="e.g. Health"></div></div>
+<div class="row"><div><label>Date</label><input id="date" type="date"></div><div><label>Status</label><select id="status"><option value="published">Published</option><option value="draft">Draft (not shown on the site)</option></select></div><div><label>Colour</label><select id="color"><option value="pink">Pink</option><option value="yellow">Yellow</option><option value="mint">Mint</option><option value="lavender">Lavender</option></select></div></div>
+<label>Short description <small>(shown on the card and at the top of the article)</small></label><textarea id="exc" style="min-height:70px"></textarea></div>
+<div class="card"><b>Feature image</b><p class="hint">Shown on the card and at the top of the article. Large photos are resized automatically.</p><input type="file" id="fimg" accept="image/*"><img id="fprev" class="prev" hidden>
 <div class="row"><div><label>Image description (alt)</label><input id="falt"></div><div><label>Caption <small>(optional)</small></label><input id="fcap"></div></div><button class="sm" id="frm" hidden>Remove image</button></div>
-<div class="card"><b>Article content</b><p class="hint">Blocks ko ↑ ↓ se upar-neeche karo. Image block daalkar article ke beech mein kahin bhi image laga sakte ho. Text mein **bold** aur [link](https://...) chalta hai.</p><div id="blocks"></div>
+<div class="card"><b>Article content</b><p class="hint">Use ↑ ↓ to move blocks up or down. Add an Image block to place an image anywhere inside the article. You can use **bold** and [link](https://...) in the text.</p><div id="blocks"></div>
 <div class="adds"><button class="sm" data-add="h2">+ Heading</button><button class="sm" data-add="p">+ Paragraph</button><button class="sm" data-add="ul">+ Bullet list</button><button class="sm" data-add="ol">+ Numbered list</button><button class="sm" data-add="img">+ Image</button></div></div>
 <div class="card"><b>FAQ <small>(optional)</small></b><div id="faq"></div><button class="sm" id="addfaq">+ Question</button></div>
-<div class="card"><b>Final takeaway <small>(optional, last mein bade box mein)</small></b><textarea id="take" style="min-height:70px"></textarea></div>
+<div class="card"><b>Final takeaway <small>(optional, shown in a large box at the end)</small></b><textarea id="take" style="min-height:70px"></textarea></div>
 <div class="bar"><button class="pri" id="save">Save &amp; update site</button><button id="cancel">Back to list</button><a id="vw" class="btn" target="_blank" hidden>View on site</a></div></section>
 
 <section id="v-set" hidden><h2>Site settings</h2><div class="card">
-<label>Contact email <small>(contact form yahin aayega)</small></label><input id="s_contact_email">
+<label>Contact email <small>(contact form messages are sent here)</small></label><input id="s_contact_email">
 <label>Home heading</label><input id="s_hero_title"><label>Home text</label><textarea id="s_hero_text" style="min-height:70px"></textarea>
 <label>Blog page text</label><textarea id="s_blog_intro" style="min-height:70px"></textarea>
 <label>About us – top line</label><textarea id="s_about_intro" style="min-height:70px"></textarea>
-<label>About us – content <small>(heading ke liye line ki shuruaat “# ” se karo; paragraphs ke beech khali line)</small></label><textarea id="s_about_text" style="min-height:220px"></textarea>
+<label>About us – content <small>(start a line with “# ” for a heading; leave a blank line between paragraphs)</small></label><textarea id="s_about_text" style="min-height:220px"></textarea>
 <p><button class="pri" id="saveset">Save settings</button></p></div></section></main>
-<dialog id="dlg"><b>Paste article text</b><p class="hint">Poora article yahan paste karo. Pehli line title hoti hai. Heading “# ” se ya alag short line se pehchani jaati hai.</p><textarea id="paste"></textarea><p><button class="pri" id="doimp">Fill the form</button> <button id="closeimp">Cancel</button></p></dialog>
+<dialog id="dlg"><b>Paste article text</b><p class="hint">Paste the full article here. The first line is the title. Headings are detected from lines starting with “# ” or from short lines on their own.</p><textarea id="paste"></textarea><p><button class="pri" id="doimp">Fill the form</button> <button id="closeimp">Cancel</button></p></dialog>
 <div id="toast"></div>
 <script>
 const $=s=>document.querySelector(s);let cur=null,old='',blocks=[],faq=[],img={src:'',alt:'',caption:''};
@@ -69,14 +69,14 @@ const GH='https://api.github.com',DEF={"contact_email": "hello@whyitmatters.com"
 const pv=s=>localPrev[s]||'../'+s;
 const b64=s=>btoa(unescape(encodeURIComponent(s)));
 async function gh(path,opt={}){const r=await fetch(GH+'/repos/'+cfg.owner+'/'+cfg.repo+path,{...opt,cache:'no-store',headers:{Authorization:'Bearer '+cfg.token,Accept:'application/vnd.github+json',...(opt.headers||{})}});
-if(r.status===401){if(cfg.ok)logout(true);throw new Error('Token galat ya expire ho gaya. Naya token banao.')}
+if(r.status===401){if(cfg.ok)logout(true);throw new Error('The token is invalid or has expired. Please create a new token.')}
 if(r.status===204)return {};const j=await r.json().catch(()=>({}));
-if(!r.ok)throw new Error(r.status===409||/does not match/.test(j.message||'')?'Conflict: file kisi aur ne badal di. Page refresh karke dobara try karo.':r.status===403?'GitHub ne mana kar diya (token ko Contents: Read and write permission chahiye).':(j.message||'GitHub error '+r.status));return j}
+if(!r.ok)throw new Error(r.status===409||/does not match/.test(j.message||'')?'Conflict: the file was changed by someone else. Refresh the page and try again.':r.status===403?'GitHub refused the request (the token needs Contents: Read and write permission).':(j.message||'GitHub error '+r.status));return j}
 const put=(path,content,msg,sha)=>gh('/contents/'+path,{method:'PUT',body:JSON.stringify({message:msg,content,branch:cfg.branch,...(sha?{sha}:{})})});
 const del=(path,sha,msg)=>gh('/contents/'+path,{method:'DELETE',body:JSON.stringify({message:msg,sha,branch:cfg.branch})});
 async function getFile(path){try{const j=await gh('/contents/'+path+'?ref='+encodeURIComponent(cfg.branch));return {text:decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))),sha:j.sha}}catch(e){if(/Not Found/i.test(e.message))return null;throw e}}
 function normalize(a){const S=x=>x==null?'':String(x),s=S(a.slug).trim().toLowerCase();
-if(!/^[a-z0-9][a-z0-9-]{0,80}$/.test(s))throw new Error('Slug sirf small letters, numbers aur - se banta hai.');if(!S(a.title).trim())throw new Error('Title zaroori hai.');
+if(!/^[a-z0-9][a-z0-9-]{0,80}$/.test(s))throw new Error('The slug can only contain lowercase letters, numbers and hyphens.');if(!S(a.title).trim())throw new Error('A title is required.');
 return {slug:s,title:S(a.title).trim(),category:S(a.category).trim(),excerpt:S(a.excerpt).trim(),date:/^\d{4}-\d\d-\d\d$/.test(a.date)?a.date:new Date().toISOString().slice(0,10),status:a.status==='draft'?'draft':'published',color:COL.includes(a.color)?a.color:'pink',image:S(a.image),image_alt:S(a.image_alt),image_caption:S(a.image_caption),
 blocks:(a.blocks||[]).map(b=>b.t==='h2'||b.t==='p'?{t:b.t,text:S(b.text)}:b.t==='ul'||b.t==='ol'?{t:b.t,items:(b.items||[]).map(S).filter(x=>x.trim())}:b.t==='img'?{t:'img',src:S(b.src),alt:S(b.alt),caption:S(b.caption)}:null).filter(Boolean),
 faq:(a.faq||[]).filter(f=>S(f.q).trim()).map(f=>({q:S(f.q).trim(),a:S(f.a).trim()})),takeaway:S(a.takeaway).trim()}}
@@ -99,16 +99,16 @@ else if(low.startsWith('frequently')||low.startsWith('faq')){for(let j=0;j<bs.le
 else if(low.startsWith('final thoughts')||low.startsWith('conclusion')){a.blocks.push({t:'h2',text:'Final thoughts'});if(bs.length>1){a.blocks.push(...toBlocks(bs.slice(0,-1)));a.takeaway=bs[bs.length-1]}else a.takeaway=bs[0]||'';if(a.blocks[a.blocks.length-1].t==='h2')a.blocks.pop()}
 else{if(head)a.blocks.push({t:'h2',text:head});a.blocks.push(...toBlocks(bs))}}
 return a}
-let wt;function watch(){clearTimeout(wt);const el=$('#st'),t0=Date.now()-3000;el.textContent='Site update ho rahi hai…';let n=0;
+let wt;function watch(){clearTimeout(wt);const el=$('#st'),t0=Date.now()-3000;el.textContent='Updating the site…';let n=0;
 const tick=async()=>{try{const j=await gh('/actions/runs?per_page=1&branch='+encodeURIComponent(cfg.branch));const r=j.workflow_runs&&j.workflow_runs[0];
-if(r&&new Date(r.created_at).getTime()>=t0&&r.status==='completed'){el.textContent=r.conclusion==='success'?'✓ Site live hai':'⚠ Build fail hua (GitHub > Actions dekho)';return}}catch(e){el.textContent='Site 1–2 minute mein update hogi';return}
-if(++n<40)wt=setTimeout(tick,5000);else el.textContent='Site 1–2 minute mein update hogi'};wt=setTimeout(tick,6000)}
+if(r&&new Date(r.created_at).getTime()>=t0&&r.status==='completed'){el.textContent=r.conclusion==='success'?'✓ Site is live':'⚠ Build failed (check GitHub > Actions)';return}}catch(e){el.textContent='The site will update in 1–2 minutes';return}
+if(++n<40)wt=setTimeout(tick,5000);else el.textContent='The site will update in 1–2 minutes'};wt=setTimeout(tick,6000)}
 async function api(p,d){
 if(p==='/api/articles'){let l=[];try{l=await gh('/contents/data/articles?ref='+encodeURIComponent(cfg.branch))}catch(e){if(!/Not Found/i.test(e.message))throw e}
 const arts=(await Promise.all(l.filter(f=>f.name.endsWith('.json')).map(async f=>{const x=await getFile(f.path);try{return JSON.parse(x.text)}catch(e){return null}}))).filter(Boolean);
 return arts.sort((a,b)=>((b.date||'')+b.slug).localeCompare((a.date||'')+a.slug))}
 if(p==='/api/article'){const a=normalize(d.article),o=d.old_slug,path='data/articles/'+a.slug+'.json',ex=await getFile(path);
-if(a.slug!==o&&ex)throw new Error('Is slug ka article pehle se hai.');
+if(a.slug!==o&&ex)throw new Error('An article with this slug already exists.');
 await put(path,b64(JSON.stringify(a,null,2)),'Article: '+a.title,ex?ex.sha:undefined);
 if(o&&o!==a.slug){const old=await getFile('data/articles/'+o+'.json');if(old)await del('data/articles/'+o+'.json',old.sha,'Rename article')}
 watch();return {ok:true,slug:a.slug}}
@@ -117,14 +117,14 @@ if(p==='/api/settings'&&d===undefined){const f=await getFile('data/settings.json
 if(p==='/api/settings'){const f=await getFile('data/settings.json'),o={};for(const k in DEF)o[k]=String(d[k]==null?DEF[k]:d[k]);await put('data/settings.json',b64(JSON.stringify(o,null,2)),'Update settings',f?f.sha:undefined);watch();return {ok:true}}
 if(p==='/api/parse')return parseText(d.text||'');
 if(p==='/api/upload'){const ext={'image/png':'png','image/jpeg':'jpg','image/webp':'webp','image/gif':'gif','image/svg+xml':'svg'},m=/^data:([\w\/+.-]+);base64,(.+)$/.exec(d.data||'');
-if(!m||!ext[m[1]])throw new Error('Sirf png, jpg, webp, gif ya svg image allowed hai.');if(m[2].length>11e6)throw new Error('Image 8 MB se badi hai.');
+if(!m||!ext[m[1]])throw new Error('Only PNG, JPG, WebP, GIF or SVG images are allowed.');if(m[2].length>11e6)throw new Error('The image is larger than 8 MB.');
 const base=(String(d.name||'image').replace(/\.[^.]*$/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40))||'image',fn=base+'-'+Math.floor(Date.now()/1000)+'.'+ext[m[1]];
 await put('public/images/posts/'+fn,m[2],'Upload image '+fn);localPrev['images/posts/'+fn]=d.data;return {path:'images/posts/'+fn}}
 throw new Error('Unknown action')}
 function store(remember){(remember?localStorage:sessionStorage).setItem('wim_gh',JSON.stringify({owner:cfg.owner,repo:cfg.repo,token:cfg.token,branch:cfg.branch}))}
 function logout(reload){localStorage.removeItem('wim_gh');sessionStorage.removeItem('wim_gh');if(reload!==false)location.reload()}
-async function verify(){cfg.ok=false;let j;try{j=await gh('')}catch(e){throw new Error(/Not Found/i.test(e.message)?'Repo nahi mila, ya is token ko is repo ka access nahi hai. Username aur repo ka naam check karo.':e.message)}
-if(j.permissions&&!j.permissions.push)throw new Error('Is token ko is repo mein likhne ki permission nahi hai (Contents: Read and write chahiye).');cfg.ok=true;return j}
+async function verify(){cfg.ok=false;let j;try{j=await gh('')}catch(e){throw new Error(/Not Found/i.test(e.message)?'Repository not found, or the token has no access to it. Check the username and repository name.':e.message)}
+if(j.permissions&&!j.permissions.push)throw new Error('This token cannot write to the repository (Contents: Read and write is required).');cfg.ok=true;return j}
 function start(){document.body.classList.remove('locked');$('#gate').hidden=true;list()}
 //GH_LAYER_END
 
@@ -149,7 +149,7 @@ let f;if(b.t==='h2'){f=document.createElement('input');f.value=b.text;f.oninput=
 else if(b.t==='p'){f=document.createElement('textarea');f.value=b.text;f.oninput=()=>b.text=f.value;d.append(f)}
 else if(b.t==='img'){d.insertAdjacentHTML('beforeend',`<input type="file" accept="image/*">${b.src?`<img class="prev" src="${esc(pv(b.src))}">`:''}<label>Alt text</label><input data-k="alt" value="${esc(b.alt)}"><label>Caption (optional)</label><input data-k="caption" value="${esc(b.caption)}">`);
 d.querySelector('[type=file]').onchange=async e=>{try{b.src=await upload(e.target.files[0]);rb()}catch(x){toast(x.message,1)}};d.querySelectorAll('[data-k]').forEach(x=>x.oninput=()=>b[x.dataset.k]=x.value)}
-else{f=document.createElement('textarea');f.placeholder='Ek line = ek point';f.value=b.items.join('\n');f.oninput=()=>b.items=f.value.split('\n').filter(x=>x.trim());d.append(f)}
+else{f=document.createElement('textarea');f.placeholder='One line = one item';f.value=b.items.join('\n');f.oninput=()=>b.items=f.value.split('\n').filter(x=>x.trim());d.append(f)}
 d.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{const j=i+ +x.dataset.m;if(j<0||j>=blocks.length)return;[blocks[i],blocks[j]]=[blocks[j],blocks[i]];rb()});
 d.querySelector('[data-x]').onclick=()=>{blocks.splice(i,1);rb()};el.append(d)})}
 function rf(){const el=$('#faq');el.innerHTML='';faq.forEach((q,i)=>{const d=document.createElement('div');d.className='blk';
@@ -160,16 +160,16 @@ $('#fimg').onchange=async e=>{try{img.src=await upload(e.target.files[0]);fimg()
 document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const t=b.dataset.add;blocks.push(t==='img'?{t,src:'',alt:'',caption:''}:t==='ul'||t==='ol'?{t,items:[]}:{t,text:''});rb()});
 $('#addfaq').onclick=()=>{faq.push({q:'',a:''});rf()};
 $('#save').onclick=async()=>{const a={slug:$('#slug').value.trim()||slugify($('#title').value),title:$('#title').value,category:$('#cat').value,excerpt:$('#exc').value,date:$('#date').value,status:$('#status').value,color:$('#color').value,takeaway:$('#take').value,image:img.src,image_alt:$('#falt').value,image_caption:$('#fcap').value,blocks,faq};
-try{const r=await api('/api/article',{article:a,old_slug:old});old=r.slug;$('#vw').hidden=false;$('#vw').href='../#'+r.slug;$('#et').textContent='Edit article';toast('Saved! Site 1–2 minute mein live ho jayegi.')}catch(x){toast(x.message,1)}};
+try{const r=await api('/api/article',{article:a,old_slug:old});old=r.slug;$('#vw').hidden=false;$('#vw').href='../#'+r.slug;$('#et').textContent='Edit article';toast('Saved! The site will be live in 1–2 minutes.')}catch(x){toast(x.message,1)}};
 $('#cancel').onclick=list;$('#n-list').onclick=list;$('#n-new').onclick=()=>edit();
 $('#rows').onclick=async e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.e)edit(window._a.find(x=>x.slug===b.dataset.e));
-if(b.dataset.d&&confirm('Ye article delete karna hai? Ye wapas nahi aayega.')){await api('/api/delete',{slug:b.dataset.d});toast('Deleted.');list()}};
+if(b.dataset.d&&confirm('Delete this article? This cannot be undone.')){await api('/api/delete',{slug:b.dataset.d});toast('Deleted.');list()}};
 $('#imp').onclick=()=>$('#dlg').showModal();$('#closeimp').onclick=()=>$('#dlg').close();
 $('#doimp').onclick=async()=>{try{const a=await api('/api/parse',{text:$('#paste').value});$('#dlg').close();const keep=cur||{};
-$('#title').value=a.title;if(!old)$('#slug').value=a.slug||slugify(a.title);if(a.category)$('#cat').value=a.category;$('#exc').value=a.excerpt;$('#take').value=a.takeaway;blocks=a.blocks;faq=a.faq;rb();rf();toast('Form fill ho gaya. Ek baar check karke Save karo.')}catch(x){toast(x.message,1)}};
+$('#title').value=a.title;if(!old)$('#slug').value=a.slug||slugify(a.title);if(a.category)$('#cat').value=a.category;$('#exc').value=a.excerpt;$('#take').value=a.takeaway;blocks=a.blocks;faq=a.faq;rb();rf();toast('The form has been filled in. Please review it and then click Save.')}catch(x){toast(x.message,1)}};
 const SK=['contact_email','hero_title','hero_text','blog_intro','about_intro','about_text'];
 $('#n-set').onclick=async()=>{const s=await api('/api/settings');SK.forEach(k=>$('#s_'+k).value=s[k]);show('set')};
-$('#saveset').onclick=async()=>{const d={};SK.forEach(k=>d[k]=$('#s_'+k).value);try{await api('/api/settings',d);toast('Settings save ho gayi.')}catch(x){toast(x.message,1)}};
+$('#saveset').onclick=async()=>{const d={};SK.forEach(k=>d[k]=$('#s_'+k).value);try{await api('/api/settings',d);toast('Settings saved.')}catch(x){toast(x.message,1)}};
 $('#logout').onclick=()=>logout(true);
 $('#gf').onsubmit=async e=>{e.preventDefault();$('#gerr').textContent='';$('#gb').disabled=true;cfg={owner:$('#g_owner').value.trim(),repo:$('#g_repo').value.trim(),token:$('#g_token').value.trim(),branch:'main'};
 try{const j=await verify();cfg.branch=j.default_branch||'main';store($('#g_rem').checked);$('#g_token').value='';start()}catch(x){cfg=null;$('#gerr').textContent=x.message}$('#gb').disabled=false};

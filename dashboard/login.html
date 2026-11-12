@@ -13,16 +13,16 @@ button{margin-top:20px;width:100%;font-family:inherit;font-weight:700;font-size:
 #err{color:#c0446e;font-weight:700;font-size:.9rem;margin-top:12px;min-height:1.2em}
 </style></head><body><form class="box" id="f">
 <div class="logo"><img src="/site/logo.svg" alt="">why it matters</div>
-<h1 id="h">Login</h1><p id="s">Dashboard mein jaane ke liye login karo.</p>
+<h1 id="h">Login</h1><p id="s">Log in to open the dashboard.</p>
 <label for="u">Username</label><input id="u" autocomplete="username" required>
 <label for="p">Password</label><input id="p" type="password" autocomplete="current-password" required>
 <div id="r" hidden><label for="p2">Repeat password</label><input id="p2" type="password" autocomplete="new-password"></div>
 <button id="b">Login</button><div id="err" role="alert"></div></form>
 <script>
 let setup=false;const $=s=>document.querySelector(s);
-fetch('/api/status').then(r=>r.json()).then(j=>{if(j.authed)return location.reload();setup=j.setup;if(setup){$('#h').textContent='Create your login';$('#s').textContent='Pehli baar: apna username aur password banao (password kam se kam 8 characters). Isse yaad rakhna.';$('#r').hidden=false;$('#p2').required=true;$('#p').autocomplete='new-password';$('#b').textContent='Create login'}});
+fetch('/api/status').then(r=>r.json()).then(j=>{if(j.authed)return location.reload();setup=j.setup;if(setup){$('#h').textContent='Create your login';$('#s').textContent='First time here: create your username and password (at least 8 characters). Keep them safe.';$('#r').hidden=false;$('#p2').required=true;$('#p').autocomplete='new-password';$('#b').textContent='Create login'}});
 $('#f').onsubmit=async e=>{e.preventDefault();$('#err').textContent='';
-if(setup&&$('#p').value!==$('#p2').value)return $('#err').textContent='Dono passwords match nahi karte.';
+if(setup&&$('#p').value!==$('#p2').value)return $('#err').textContent='The two passwords do not match.';
 const r=await fetch(setup?'/api/setup':'/api/login',{method:'POST',headers:{'Content-Type':'application/json','X-Admin':'1'},body:JSON.stringify({username:$('#u').value,password:$('#p').value})});
 const j=await r.json();if(r.ok)location.reload();else $('#err').textContent=j.error||'Error'};
 </script></body></html>

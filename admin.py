@@ -45,8 +45,8 @@ def articles():
 
 def clean(a):
     s = str(a.get('slug', '')).strip().lower()
-    if not SLUG.match(s): raise ValueError('Slug sirf small letters, numbers aur - se banta hai.')
-    if not str(a.get('title', '')).strip(): raise ValueError('Title zaroori hai.')
+    if not SLUG.match(s): raise ValueError('The slug can only contain lowercase letters, numbers and hyphens.')
+    if not str(a.get('title', '')).strip(): raise ValueError('A title is required.')
     try: datetime.date.fromisoformat(a.get('date', ''))
     except Exception: a['date'] = datetime.date.today().isoformat()
     blocks = []
@@ -232,7 +232,7 @@ class H(BaseHTTPRequestHandler):
         u = urlparse(self.path); q = parse_qs(u.query)
         if u.path == '/api/status': return self.out(200, {'setup': not os.path.exists(AUTH), 'authed': self.authed()})
         if u.path == '/': return self.out(200, open(P('dashboard', 'local.html' if self.authed() else 'login.html'), 'rb').read(), 'text/html')
-        if u.path.startswith('/api/') and not self.authed(): return self.out(401, {'error': 'Login zaroori hai.'})
+        if u.path.startswith('/api/') and not self.authed(): return self.out(401, {'error': 'Login required.'})
         if u.path == '/api/articles': return self.out(200, articles())
         if u.path == '/api/settings': return self.out(200, settings())
         if u.path == '/api/zip':
@@ -253,32 +253,32 @@ class H(BaseHTTPRequestHandler):
             d = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
             path = urlparse(self.path).path
             if path == '/api/login':
-                if time.time() < FAIL['until']: raise ValueError(f"Bahut zyada galat koshish. {int(FAIL['until'] - time.time()) + 1} second baad try karo.")
+                if time.time() < FAIL['until']: raise ValueError(f"Too many failed attempts. Try again in {int(FAIL['until'] - time.time()) + 1} seconds.")
                 if check_auth(str(d.get('username', '')), str(d.get('password', ''))):
                     FAIL['n'] = 0; tok = secrets.token_urlsafe(32); SESS[tok] = time.time() + SESSION_SECONDS
                     return self.out(200, {'ok': True}, hdr=cookie(tok))
                 FAIL['n'] += 1; time.sleep(0.7)
                 if FAIL['n'] >= 5: FAIL['until'] = time.time() + min(300, 30 * FAIL['n'])
-                raise ValueError('Username ya password galat hai.')
+                raise ValueError('Incorrect username or password.')
             if path == '/api/setup':
-                if os.path.exists(AUTH): raise ValueError('Login pehle se bana hua hai.')
+                if os.path.exists(AUTH): raise ValueError('A login already exists.')
                 u_, p_ = str(d.get('username', '')).strip(), str(d.get('password', ''))
-                if len(u_) < 3: raise ValueError('Username kam se kam 3 characters ka rakho.')
-                if len(p_) < 8: raise ValueError('Password kam se kam 8 characters ka rakho.')
+                if len(u_) < 3: raise ValueError('The username must be at least 3 characters.')
+                if len(p_) < 8: raise ValueError('The password must be at least 8 characters.')
                 set_auth(u_, p_); tok = secrets.token_urlsafe(32); SESS[tok] = time.time() + SESSION_SECONDS
                 return self.out(200, {'ok': True}, hdr=cookie(tok))
-            if not self.authed(): return self.out(401, {'error': 'Login zaroori hai.'})
+            if not self.authed(): return self.out(401, {'error': 'Login required.'})
             if path == '/api/logout':
                 SESS.pop(self.token(), None); return self.out(200, {'ok': True}, hdr=cookie('', 0))
             if path == '/api/password':
                 a = read_json(AUTH, {})
-                if not check_auth(a.get('user', ''), str(d.get('old', ''))): raise ValueError('Purana password galat hai.')
-                if len(str(d.get('new', ''))) < 8: raise ValueError('Naya password kam se kam 8 characters ka rakho.')
+                if not check_auth(a.get('user', ''), str(d.get('old', ''))): raise ValueError('The current password is incorrect.')
+                if len(str(d.get('new', ''))) < 8: raise ValueError('The new password must be at least 8 characters.')
                 set_auth(a['user'], str(d['new'])); keep = self.token(); SESS.clear(); SESS[keep] = time.time() + SESSION_SECONDS
                 return self.out(200, {'ok': True})
             if path == '/api/article':
                 a = clean(d['article']); old = d.get('old_slug', '')
-                if a['slug'] != old and os.path.exists(os.path.join(ARTS, a['slug'] + '.json')): raise ValueError('Is slug ka article pehle se hai.')
+                if a['slug'] != old and os.path.exists(os.path.join(ARTS, a['slug'] + '.json')): raise ValueError('An article with this slug already exists.')
                 write_json(os.path.join(ARTS, a['slug'] + '.json'), a)
                 if old and old != a['slug'] and SLUG.match(old) and os.path.exists(os.path.join(ARTS, old + '.json')): os.remove(os.path.join(ARTS, old + '.json'))
                 return self.out(200, {'ok': True, 'live': build(), 'slug': a['slug']})
@@ -293,9 +293,9 @@ class H(BaseHTTPRequestHandler):
             if path == '/api/upload':
                 ext = {'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg'}
                 m = re.match(r'^data:([\w/+.-]+);base64,(.+)$', d.get('data', ''), re.S)
-                if not m or m.group(1) not in ext: raise ValueError('Sirf png, jpg, webp, gif ya svg image allowed hai.')
+                if not m or m.group(1) not in ext: raise ValueError('Only PNG, JPG, WebP, GIF or SVG images are allowed.')
                 raw = base64.b64decode(m.group(2))
-                if len(raw) > 8_000_000: raise ValueError('Image 8 MB se badi hai.')
+                if len(raw) > 8_000_000: raise ValueError('The image is larger than 8 MB.')
                 os.makedirs(IMGS, exist_ok=True)
                 base = re.sub(r'[^a-z0-9-]+', '-', os.path.splitext(str(d.get('name', 'image')))[0].lower()).strip('-')[:40] or 'image'
                 fn = f'{base}-{int(time.time())}.{ext[m.group(1)]}'
@@ -312,11 +312,11 @@ def main():
     for port in range(8000, 8011):
         try: srv = ThreadingHTTPServer(('127.0.0.1', port), H); break
         except OSError: continue
-    else: sys.exit('Koi port free nahi mila (8000-8010).')
+    else: sys.exit('No free port found (8000-8010).')
     url = f'http://localhost:{port}/'
-    print(f'\n  Dashboard chal raha hai: {url}\n  Band karne ke liye is window mein Ctrl+C dabayein.\n')
+    print(f'\n  Dashboard is running at: {url}\n  Press Ctrl+C in this window to stop it.\n')
     threading.Timer(1, lambda: webbrowser.open(url)).start()
     try: srv.serve_forever()
-    except KeyboardInterrupt: print('\n  Dashboard band.')
+    except KeyboardInterrupt: print('\n  Dashboard stopped.')
 
 if __name__ == '__main__': main()
