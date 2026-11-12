@@ -1,0 +1,43 @@
+{
+  "slug": "test",
+  "title": "test",
+  "category": "kio",
+  "excerpt": "test doc",
+  "date": "2026-11-12",
+  "status": "published",
+  "color": "lavender",
+  "image": "images/posts/royal-my-sore-walks-1794467360.webp",
+  "image_alt": "Roya;ll",
+  "image_caption": "",
+  "blocks": [
+    {
+      "t": "h2",
+      "text": "test"
+    },
+    {
+      "t": "img",
+      "src": "images/posts/machine-guns-page-casino-logo-1794467406.webp",
+      "alt": "",
+      "caption": ""
+    },
+    {
+      "t": "p",
+      "text": "gdfhgahfajlfbvaisjfvnv\nfsadlkhnnkla\nfdsakhnfsad"
+    },
+    {
+      "t": "p",
+      "text": "kjsdhfjilfsadl\n"
+    }
+  ],
+  "faq": [
+    {
+      "q": "erfjiuhaisd",
+      "a": "gywerghwrt"
+    },
+    {
+      "q": "rtgwreg",
+      "a": "ertgwgywregy"
+    }
+  ],
+  "takeaway": "bnjwahefgou8qgeufgbig\nfwekhoengo"
+}
