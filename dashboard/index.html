@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why It Matters – Dashboard</title>
+<link rel="icon" href="/site/favicon.svg" type="image/svg+xml">
+<style>
+:root{--ink:#3d3b78;--bg:#fcfaff;--line:#d9d4f5;--pink:#ffc9db;--yellow:#ffeaa8;--mint:#c4f0e0;--lav:#e9e4ff;font-family:"Trebuchet MS",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#2d2b5c}
+header{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:12px 24px;border-bottom:2px solid var(--ink);background:var(--lav);position:sticky;top:0;z-index:5}
+header img{width:40px}header b{font-size:1.2rem;color:var(--ink)}header .sp{flex:1}
+button,.btn{font-weight:700;font-size:.95rem;font-family:inherit;border:2px solid var(--ink);background:#fff;color:var(--ink);padding:8px 16px;border-radius:999px;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{background:var(--yellow)}button.pri{background:var(--ink);color:#fff}button.pri:hover{background:#2e2c5f}button.sm{padding:4px 11px;font-size:.85rem}button.del{border-color:#c0446e;color:#c0446e}
+nav button.on{background:var(--pink)}
+main{max-width:960px;margin:0 auto;padding:24px}
+h2{color:var(--ink);margin:0 0 16px}
+.card{background:#fff;border:2px solid var(--ink);border-radius:18px;padding:18px;margin-bottom:18px}
+label{display:block;font-weight:700;font-size:.9rem;color:var(--ink);margin:12px 0 4px}label small{font-weight:400;color:#7a77a8}
+input,textarea,select{width:100%;font-size:1rem;font-family:inherit;padding:10px 12px;border:2px solid var(--line);border-radius:12px;background:#fff;color:inherit}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ink)}textarea{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:.95rem}th{color:var(--ink)}
+.pill{padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:700;border:2px solid var(--ink)}.pill.published{background:var(--mint)}.pill.draft{background:var(--yellow)}
+.blk{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px;background:#fdfcff}
+.blk .hd{display:flex;gap:6px;align-items:center;margin-bottom:8px}.blk .hd b{flex:1;color:var(--ink);font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+.adds{display:flex;gap:8px;flex-wrap:wrap}.prev{max-width:260px;max-height:160px;border-radius:12px;border:2px solid var(--line);display:block;margin:8px 0}
+#toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:12px 20px;border-radius:14px;display:none;max-width:340px;z-index:9}#toast.err{background:#c0446e}
+.hint{color:#6d6b99;font-size:.9rem;margin:0 0 10px}.bar{position:sticky;bottom:0;background:var(--bg);padding:12px 0;border-top:2px solid var(--line);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+dialog{border:2px solid var(--ink);border-radius:18px;width:min(720px,94vw);padding:20px}dialog textarea{min-height:300px}
+</style></head><body>
+<header><img src="/site/logo.svg" alt=""><b>why it matters · dashboard</b>
+<nav><button id="n-list" class="on">Articles</button> <button id="n-new">+ New article</button> <button id="n-set">Settings</button></nav><span class="sp"></span>
+<a class="btn" href="/site/index.html" target="_blank">Preview site</a> <a class="btn" href="/api/zip">Download site ZIP</a></header>
+<main>
+<section id="v-list"><h2>Articles</h2><div class="card"><table><thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table><p class="hint" id="none" hidden>Abhi koi article nahi hai. “New article” se shuru karo.</p></div>
+<div class="card"><b>Site ko live kaise karein?</b><p class="hint">Har save ke baad <code>public</code> folder apne aap update ho jata hai. Live karne ke liye “Download site ZIP” dabao, aur uski files hosting par upload kar do (purani files replace karni hongi).</p></div></section>
+
+<section id="v-edit" hidden><h2 id="et">New article</h2>
+<div class="card"><p class="hint">Pehle se likha article hai? <button class="sm" id="imp">Paste article text</button> (heading, lists, FAQ aur SEO details apne aap fill ho jayenge)</p>
+<label>Title</label><input id="title"><div class="row"><div><label>Slug <small>(URL ka naam)</small></label><input id="slug"></div><div><label>Category</label><input id="cat" placeholder="e.g. Health"></div></div>
+<div class="row"><div><label>Date</label><input id="date" type="date"></div><div><label>Status</label><select id="status"><option value="published">Published</option><option value="draft">Draft (site par nahi dikhega)</option></select></div><div><label>Colour</label><select id="color"><option value="pink">Pink</option><option value="yellow">Yellow</option><option value="mint">Mint</option><option value="lavender">Lavender</option></select></div></div>
+<label>Short description <small>(card par aur article ke upar dikhta hai)</small></label><textarea id="exc" style="min-height:70px"></textarea></div>
+<div class="card"><b>Feature image</b><p class="hint">Card aur article ke top par dikhegi. Badi photos apne aap chhoti ho jaati hain.</p><input type="file" id="fimg" accept="image/*"><img id="fprev" class="prev" hidden>
+<div class="row"><div><label>Image description (alt)</label><input id="falt"></div><div><label>Caption <small>(optional)</small></label><input id="fcap"></div></div><button class="sm" id="frm" hidden>Remove image</button></div>
+<div class="card"><b>Article content</b><p class="hint">Blocks ko ↑ ↓ se upar-neeche karo. Image block daalkar article ke beech mein kahin bhi image laga sakte ho. Text mein **bold** aur [link](https://...) chalta hai.</p><div id="blocks"></div>
+<div class="adds"><button class="sm" data-add="h2">+ Heading</button><button class="sm" data-add="p">+ Paragraph</button><button class="sm" data-add="ul">+ Bullet list</button><button class="sm" data-add="ol">+ Numbered list</button><button class="sm" data-add="img">+ Image</button></div></div>
+<div class="card"><b>FAQ <small>(optional)</small></b><div id="faq"></div><button class="sm" id="addfaq">+ Question</button></div>
+<div class="card"><b>Final takeaway <small>(optional, last mein bade box mein)</small></b><textarea id="take" style="min-height:70px"></textarea></div>
+<div class="bar"><button class="pri" id="save">Save &amp; update site</button><button id="cancel">Back to list</button><a id="vw" class="btn" target="_blank" hidden>View on site</a></div></section>
+
+<section id="v-set" hidden><h2>Site settings</h2><div class="card">
+<label>Contact email <small>(contact form yahin aayega)</small></label><input id="s_contact_email">
+<label>Home heading</label><input id="s_hero_title"><label>Home text</label><textarea id="s_hero_text" style="min-height:70px"></textarea>
+<label>Blog page text</label><textarea id="s_blog_intro" style="min-height:70px"></textarea>
+<label>About us – top line</label><textarea id="s_about_intro" style="min-height:70px"></textarea>
+<label>About us – content <small>(heading ke liye line ki shuruaat “# ” se karo; paragraphs ke beech khali line)</small></label><textarea id="s_about_text" style="min-height:220px"></textarea>
+<p><button class="pri" id="saveset">Save settings</button></p></div></section></main>
+<dialog id="dlg"><b>Paste article text</b><p class="hint">Poora article yahan paste karo. Pehli line title hoti hai. Heading “# ” se ya alag short line se pehchani jaati hai.</p><textarea id="paste"></textarea><p><button class="pri" id="doimp">Fill the form</button> <button id="closeimp">Cancel</button></p></dialog>
+<div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s);let cur=null,old='',blocks=[],faq=[],img={src:'',alt:'',caption:''};
+const api=(p,d)=>fetch(p,d===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-Admin':'1'},body:JSON.stringify(d)}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j});
+function toast(m,e){const t=$('#toast');t.textContent=m;t.className=e?'err':'';t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500)}
+const slugify=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,70);
+function show(v){['list','edit','set'].forEach(x=>{$('#v-'+x).hidden=x!==v;});$('#n-list').className=v==='list'?'on':'';$('#n-set').className=v==='set'?'on':'';$('#n-new').className=''}
+async function list(){const a=await api('/api/articles');show('list');$('#none').hidden=a.length>0;
+$('#rows').innerHTML=a.map(x=>`<tr><td><b>${esc(x.title)}</b></td><td>${esc(x.category)}</td><td>${x.date}</td><td><span class="pill ${x.status}">${x.status}</span></td><td><button class="sm" data-e="${x.slug}">Edit</button> <a class="btn sm" target="_blank" href="/site/index.html#${x.slug}">View</a> <button class="sm del" data-d="${x.slug}">Delete</button></td></tr>`).join('');window._a=a}
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function edit(a){a=a||{slug:'',title:'',category:'',excerpt:'',date:new Date().toISOString().slice(0,10),status:'published',color:'pink',blocks:[],faq:[],takeaway:'',image:'',image_alt:'',image_caption:''};
+old=a.slug;cur=a;$('#et').textContent=old?'Edit article':'New article';
+$('#title').value=a.title;$('#slug').value=a.slug;$('#cat').value=a.category;$('#date').value=a.date;$('#status').value=a.status;$('#color').value=a.color;$('#exc').value=a.excerpt;$('#take').value=a.takeaway;
+img={src:a.image,alt:a.image_alt,caption:a.image_caption};blocks=JSON.parse(JSON.stringify(a.blocks));faq=JSON.parse(JSON.stringify(a.faq));
+$('#falt').value=img.alt;$('#fcap').value=img.caption;fimg();rb();rf();$('#vw').hidden=!old;if(old)$('#vw').href='/site/index.html#'+old;show('edit');$('#n-new').className=old?'':'on'}
+function fimg(){$('#fprev').hidden=$('#frm').hidden=!img.src;if(img.src)$('#fprev').src='/site/'+img.src}
+function resize(file){return new Promise((ok,no)=>{const r=new FileReader();r.onerror=no;r.onload=()=>{if(file.type==='image/svg+xml'||file.type==='image/gif')return ok(r.result);const i=new Image();i.onerror=no;i.onload=()=>{const k=Math.min(1,1600/i.width),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);ok(c.toDataURL('image/webp',.85))};i.src=r.result};r.readAsDataURL(file)})}
+async function upload(file){const data=await resize(file);return (await api('/api/upload',{name:file.name,data})).path}
+function rb(){const el=$('#blocks');el.innerHTML='';const N={h2:'Heading',p:'Paragraph',ul:'Bullet list',ol:'Numbered list',img:'Image'};
+blocks.forEach((b,i)=>{const d=document.createElement('div');d.className='blk';
+d.innerHTML=`<div class="hd"><b>${N[b.t]}</b><button class="sm" data-m="-1">↑</button><button class="sm" data-m="1">↓</button><button class="sm del" data-x="1">✕</button></div>`;
+let f;if(b.t==='h2'){f=document.createElement('input');f.value=b.text;f.oninput=()=>b.text=f.value;d.append(f)}
+else if(b.t==='p'){f=document.createElement('textarea');f.value=b.text;f.oninput=()=>b.text=f.value;d.append(f)}
+else if(b.t==='img'){d.insertAdjacentHTML('beforeend',`<input type="file" accept="image/*">${b.src?`<img class="prev" src="/site/${esc(b.src)}">`:''}<label>Alt text</label><input data-k="alt" value="${esc(b.alt)}"><label>Caption (optional)</label><input data-k="caption" value="${esc(b.caption)}">`);
+d.querySelector('[type=file]').onchange=async e=>{try{b.src=await upload(e.target.files[0]);rb()}catch(x){toast(x.message,1)}};d.querySelectorAll('[data-k]').forEach(x=>x.oninput=()=>b[x.dataset.k]=x.value)}
+else{f=document.createElement('textarea');f.placeholder='Ek line = ek point';f.value=b.items.join('\n');f.oninput=()=>b.items=f.value.split('\n').filter(x=>x.trim());d.append(f)}
+d.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{const j=i+ +x.dataset.m;if(j<0||j>=blocks.length)return;[blocks[i],blocks[j]]=[blocks[j],blocks[i]];rb()});
+d.querySelector('[data-x]').onclick=()=>{blocks.splice(i,1);rb()};el.append(d)})}
+function rf(){const el=$('#faq');el.innerHTML='';faq.forEach((q,i)=>{const d=document.createElement('div');d.className='blk';
+d.innerHTML=`<div class="hd"><b>Question ${i+1}</b><button class="sm del">✕</button></div><input value="${esc(q.q)}" placeholder="Question"><textarea placeholder="Answer" style="margin-top:8px;min-height:70px">${esc(q.a)}</textarea>`;
+d.querySelector('input').oninput=e=>q.q=e.target.value;d.querySelector('textarea').oninput=e=>q.a=e.target.value;d.querySelector('.del').onclick=()=>{faq.splice(i,1);rf()};el.append(d)})}
+$('#title').oninput=()=>{if(!old)$('#slug').value=slugify($('#title').value)};
+$('#fimg').onchange=async e=>{try{img.src=await upload(e.target.files[0]);fimg()}catch(x){toast(x.message,1)}};$('#frm').onclick=()=>{img.src='';fimg()};
+document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const t=b.dataset.add;blocks.push(t==='img'?{t,src:'',alt:'',caption:''}:t==='ul'||t==='ol'?{t,items:[]}:{t,text:''});rb()});
+$('#addfaq').onclick=()=>{faq.push({q:'',a:''});rf()};
+$('#save').onclick=async()=>{const a={slug:$('#slug').value.trim()||slugify($('#title').value),title:$('#title').value,category:$('#cat').value,excerpt:$('#exc').value,date:$('#date').value,status:$('#status').value,color:$('#color').value,takeaway:$('#take').value,image:img.src,image_alt:$('#falt').value,image_caption:$('#fcap').value,blocks,faq};
+try{const r=await api('/api/article',{article:a,old_slug:old});old=r.slug;$('#vw').hidden=false;$('#vw').href='/site/index.html#'+r.slug;$('#et').textContent='Edit article';toast('Saved! Site update ho gayi ('+r.live+' articles live).')}catch(x){toast(x.message,1)}};
+$('#cancel').onclick=list;$('#n-list').onclick=list;$('#n-new').onclick=()=>edit();
+$('#rows').onclick=async e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.e)edit(window._a.find(x=>x.slug===b.dataset.e));
+if(b.dataset.d&&confirm('Ye article delete karna hai? Ye wapas nahi aayega.')){await api('/api/delete',{slug:b.dataset.d});toast('Deleted.');list()}};
+$('#imp').onclick=()=>$('#dlg').showModal();$('#closeimp').onclick=()=>$('#dlg').close();
+$('#doimp').onclick=async()=>{try{const a=await api('/api/parse',{text:$('#paste').value});$('#dlg').close();const keep=cur||{};
+$('#title').value=a.title;if(!old)$('#slug').value=a.slug||slugify(a.title);if(a.category)$('#cat').value=a.category;$('#exc').value=a.excerpt;$('#take').value=a.takeaway;blocks=a.blocks;faq=a.faq;rb();rf();toast('Form fill ho gaya. Ek baar check karke Save karo.')}catch(x){toast(x.message,1)}};
+const SK=['contact_email','hero_title','hero_text','blog_intro','about_intro','about_text'];
+$('#n-set').onclick=async()=>{const s=await api('/api/settings');SK.forEach(k=>$('#s_'+k).value=s[k]);show('set')};
+$('#saveset').onclick=async()=>{const d={};SK.forEach(k=>d[k]=$('#s_'+k).value);try{await api('/api/settings',d);toast('Settings save ho gayi.')}catch(x){toast(x.message,1)}};
+list();
+</script></body></html>
